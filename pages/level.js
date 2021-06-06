@@ -12,11 +12,16 @@ const TOKEN = {
 
 const CODE_TO_TOKEN = Object.fromEntries(Object.entries(TOKEN).map(([a, b]) => [b, a]));
 
+function softDeepCopy(object) {
+    if (!object) return object;
+    return JSON.parse(JSON.stringify(object));
+}
+
 export default class Level extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            board: JSON.parse(JSON.stringify(this.props.definition)),
+            board: softDeepCopy(props.definition),
             deathByes: [],
         }
     }
@@ -34,7 +39,7 @@ export default class Level extends Component {
     }
 
     move(dx, dy) {
-        let newBoard = JSON.parse(JSON.stringify(this.state.board));
+        let newBoard = softDeepCopy(this.state.board);
         let playerSquares = this.getPlayerSquares();
 
         let deathByes = [];
@@ -43,7 +48,7 @@ export default class Level extends Component {
             let newX = x + dx, newY = y + dy;
             if (!this.isValidPosition(newX, newY)) continue;
 
-            let newContents = JSON.parse(JSON.stringify(this.state.board[x][y]));
+            let newContents = softDeepCopy(this.state.board[x][y]);
             if (this.canAcceptPlayer(newX, newY)) newContents = newContents.filter(x => x !== TOKEN.PLAYER1);
 
             newBoard[x][y] = newContents;
@@ -87,7 +92,7 @@ export default class Level extends Component {
     }
 
     handleAttemptedMove(x, y) {
-        let tokens = JSON.parse(JSON.stringify(this.state.board[x][y]));
+        let tokens = softDeepCopy(this.state.board[x][y]);
         if (this.canAcceptPlayer(x, y)) {
             tokens.push(TOKEN.PLAYER1);
         }
@@ -137,7 +142,7 @@ export default class Level extends Component {
 
     restart() {
         this.setState({
-            board: JSON.parse(JSON.stringify(this.props.definition)),
+            board: softDeepCopy(this.props.definition),
             deathByes: [],
         })
     }
