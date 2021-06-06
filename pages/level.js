@@ -65,10 +65,10 @@ export default class Level extends Component {
                 if ( playerIndex > -1 ) {
                     newContents.splice(playerIndex, 1);
                 }
-                else {
+            }
+            else {
                    newContents.push(TOKEN.PLAYER1)
                 }
-            }
 
             newBoard[x][y] = newContents;
             //removeDuplicatePlayers(newContents)
