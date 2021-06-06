@@ -62,10 +62,7 @@ export default class Level extends Component {
             }
 
             if (this.canAcceptPlayer(newX, newY)) {
-                let playerIndex = this.state.board[x][y].indexOf(TOKEN.PLAYER1);
-                if ( playerIndex > -1 ) {
-                    newContents.splice(playerIndex, 1);
-                }
+
             }
             else {
                    newContents.push(TOKEN.PLAYER1)
