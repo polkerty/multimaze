@@ -50,7 +50,7 @@ export default class Level extends Component {
 
             let newContents = softDeepCopy(newBoard[x][y]);
             if (this.canAcceptPlayer(newX, newY)) {
-                let playerIndex = newContents.indexOf(TOKEN.PLAYER1);
+                let playerIndex = newBoard[x][y].indexOf(TOKEN.PLAYER1);
                 if ( playerIndex > -1 ) {
                     newContents.splice(playerIndex, 1);
                 }
