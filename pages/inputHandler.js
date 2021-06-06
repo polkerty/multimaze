@@ -6,7 +6,6 @@ export default class InputHandler {
 
         const self = this;
         window.addEventListener('keydown', function (e) {
-            console.log("Input happened", e.key, self.handlers);
             switch(e.key) {
                 case 'ArrowLeft':
                     self.emit('left');

@@ -19,8 +19,6 @@ export default class Level extends Component {
             board: JSON.parse(JSON.stringify(this.props.definition)),
             deathByes: [],
         }
-
-        console.log("Props: ", props);
     }
 
     componentDidMount() {
@@ -42,7 +40,6 @@ export default class Level extends Component {
         let deathByes = [];
 
         for (const [x, y] of playerSquares) {
-
             let newX = x + dx, newY = y + dy;
             if (!this.isValidPosition(newX, newY)) continue;
 
@@ -72,7 +69,7 @@ export default class Level extends Component {
     getPlayerSquares() {
         let squares = [];
         for (let i = 0; i < this.state.board.length; ++i) {
-            for (let j = 0; j < this.state.board.length; ++j) {
+            for (let j = 0; j < this.state.board[i].length; ++j) {
                 if (this.state.board[i][j].includes(TOKEN.PLAYER1)) {
                     squares.push([i, j]);
                 }
