@@ -52,7 +52,7 @@ export default class Level extends Component {
         for (const [x, y] of playerSquares) {
             let newX = x + dx, newY = y + dy;
             if (!this.isValidPosition(newX, newY)) {
-                newContents.push(TOKEN.PLAYER1)
+                newBoard[x][y].push(TOKEN.PLAYER1)
                 continue
             }
 
