@@ -54,7 +54,11 @@ export default class Level extends Component {
             deathByes: deathByes
         })
 
-        if (this.isDead()) this.restart();
+        if (this.isDead()) return this.restart();
+
+        if ( this.hasWon()) {
+            this.win();
+        }
     }
 
     getPlayerSquares() {
@@ -83,6 +87,7 @@ export default class Level extends Component {
             tokens.push(TOKEN.PLAYER1);
         }
         tokens = tokens.filter(x => x !== TOKEN.BARRIER);
+        tokens = tokens.filter(x => x !== TOKEN.COIN);
 
         let turnDead = false;
 
@@ -91,6 +96,7 @@ export default class Level extends Component {
             tokens.push(TOKEN.DEATH);
             turnDead = true;
         }
+
 
         return [[...new Set(tokens)], turnDead];
     }
@@ -117,11 +123,25 @@ export default class Level extends Component {
         return false;
     }
 
+    hasWon() {
+        let coinCountZero = !this.state.board.flat().some(x => x.includes(TOKEN.COIN));
+        let onWinSquares = !this.state.board.flat().some(x => x.includes(TOKEN.PLAYER1) && !x.includes(TOKEN.FINISH1));
+        return coinCountZero && onWinSquares;
+    }
+
     restart() {
         this.setState({
             board: JSON.parse(JSON.stringify(this.props.definition)),
             deathByes: [],
         })
+    }
+
+    win() {
+        this.props.announceVictory();
+    }
+
+    componentWillUnmount() {
+        this.props.inputHandler.clearAll();
     }
 
 }

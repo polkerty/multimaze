@@ -29,6 +29,10 @@ export default class InputHandler {
 
     }
 
+    clearAll() {
+        this.handlers = {};
+    }
+
     emit(event, data = null) {
         if (this.handlers[event]) {
             for (const handler of this.handlers[event]) {
