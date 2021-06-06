@@ -45,14 +45,14 @@ export default class Level extends Component {
         let deathByes = [];
 
         for (const [x, y] of playerSquares) {
-            if (newBoard[x][y].indexOf(TOKEN.PLAYER1) > -1){
-                newBoard[x][y].splice(TOKEN.PLAYER1, 1)
+            while (newBoard[x][y].includes(TOKEN.PLAYER1)){
+                newBoard[x][y].splice(newBoard[x][y].indexOf(TOKEN.PLAYER1), 1)
             }
             let newX = x + dx, newY = y + dy;
             if (!this.isValidPosition(newX, newY)) continue;
 
             let newContents = softDeepCopy(this.state.board[x][y]);
-            if (newBoard[x][y].indexOf(TOKEN.PLAYER1) > -1){
+            if (newBoard[x][y].includes(TOKEN.PLAYER1)){
                 newContents.push(TOKEN.PLAYER1)
             }
             //removeDuplicatePlayers(newContents)
