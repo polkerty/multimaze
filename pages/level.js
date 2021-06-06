@@ -16,15 +16,23 @@ export default class Level extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            board: JSON.parse(JSON.stringify(props.definition)),
+            board: JSON.parse(JSON.stringify(this.props.definition)),
             deathByes: [],
         }
 
+        console.log("Props: ", props);
+    }
+
+    componentDidMount() {
+        this.restart();
+
+        this.props.inputHandler.clearAll();
         this.props.inputHandler.on('left', () => this.move(0, -1));
         this.props.inputHandler.on('right', () => this.move(0, 1));
         this.props.inputHandler.on('up', () => this.move(-1, 0));
         this.props.inputHandler.on('down', () => this.move(1, 0));
         this.props.inputHandler.on('restart', () => this.restart());
+        this.props.inputHandler.on('win', () => this.win());
     }
 
     move(dx, dy) {
@@ -56,7 +64,7 @@ export default class Level extends Component {
 
         if (this.isDead()) return this.restart();
 
-        if ( this.hasWon()) {
+        if (this.hasWon()) {
             this.win();
         }
     }
@@ -102,6 +110,7 @@ export default class Level extends Component {
     }
 
     render() {
+
         return <div className={"level-grid"}>
             {
                 this.state.board.map((row, index) => (<div key={index} className={"level-row"}>
@@ -114,10 +123,10 @@ export default class Level extends Component {
     }
 
     isDead() {
-        for ( let i = 0; i < this.state.board.length; ++i ){
-            for ( let j = 0; j < this.state.board[i].length; ++j ) {
-                if ( this.state.deathByes.some(([x, y])=>x === i && y === j)) continue;
-                if ( this.state.board[i][j].includes(TOKEN.DEATH) && this.state.board[i][j].includes(TOKEN.PLAYER1)) return true;
+        for (let i = 0; i < this.state.board.length; ++i) {
+            for (let j = 0; j < this.state.board[i].length; ++j) {
+                if (this.state.deathByes.some(([x, y]) => x === i && y === j)) continue;
+                if (this.state.board[i][j].includes(TOKEN.DEATH) && this.state.board[i][j].includes(TOKEN.PLAYER1)) return true;
             }
         }
         return false;
@@ -137,6 +146,7 @@ export default class Level extends Component {
     }
 
     win() {
+        console.log("Lucky you!");
         this.props.announceVictory();
     }
 
@@ -148,9 +158,12 @@ export default class Level extends Component {
 
 function Cell(props) {
     return <div className={"level-cell"}>
+        <div className={"level-cell__spacer"}/>
         {
             props.def.map((code, index) => <div key={index}
-                                                className={"level-token level-token--" + CODE_TO_TOKEN[code]}/>)
+                                                className={"level-token level-token--" + CODE_TO_TOKEN[code]}>
+                <div className={"level-cell__spacer"}/>
+            </div>)
         }
     </div>
 }

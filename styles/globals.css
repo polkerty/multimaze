@@ -23,8 +23,8 @@ a {
     flex-grow: 1;
     max-width: 100%;
     max-height: 100%;
-    width: 500px;
-    height: 500px;
+    width: 1000px;
+    /*height: 500px;*/
 }
 
 .level-row {
@@ -36,6 +36,10 @@ a {
     flex-grow: 1;
     position: relative;
     border: 1px solid black;
+}
+
+.level-cell__spacer {
+    margin-top: 100%;
 }
 
 /* Level tokens:
@@ -56,7 +60,7 @@ a {
 
 .level-token--WALL {
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
     left: 0;
     top: 0;
     z-index: 0;
@@ -65,7 +69,7 @@ a {
 
 .level-token--PLAYER1 {
     width: 80%;
-    height: 80%;
+    /*height: 80%;*/
     left: 10%;
     top: 10%;
     z-index: 1;
@@ -74,7 +78,7 @@ a {
 
 .level-token--FINISH1 {
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
     left: 0;
     top: 0;
     z-index: 0;
@@ -83,7 +87,7 @@ a {
 
 .level-token--DEATH {
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
     left: 0;
     top: 0;
     z-index: 0;
@@ -92,7 +96,7 @@ a {
 
 .level-token--COLLAPSE {
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
     left: 0;
     top: 0;
     z-index: 0;
@@ -101,7 +105,7 @@ a {
 
 .level-token--BARRIER {
     width: 80%;
-    height: 80%;
+    /*height: 80%;*/
     left: 10%;
     top: 10%;
     z-index: 1;
@@ -110,7 +114,7 @@ a {
 
 .level-token--COIN {
     width: 60%;
-    height: 60%;
+    /*height: 60%;*/
     left: 20%;
     top: 20%;
     z-index: 2;

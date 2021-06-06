@@ -6,6 +6,7 @@ export default class InputHandler {
 
         const self = this;
         window.addEventListener('keydown', function (e) {
+            console.log("Input happened", e.key, self.handlers);
             switch(e.key) {
                 case 'ArrowLeft':
                     self.emit('left');
@@ -21,6 +22,9 @@ export default class InputHandler {
                     break;
                 case 'r':
                     self.emit('restart');
+                    break;
+                case 'w':
+                    self.emit('win');
                     break;
                 default:
                     // Life is good, take it easy

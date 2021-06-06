@@ -21,6 +21,7 @@ export default class Controller extends Component {
     }
 
     onCurrentLevelWin() {
+        console.log("Onward and upward", (this.state.currentLevel + 1 ) % this.state.levels.length, this.state.gameCount + 1);
         this.setState({
             currentLevel: (this.state.currentLevel + 1 ) % this.state.levels.length,
             gameCount: this.state.gameCount + 1
@@ -30,7 +31,7 @@ export default class Controller extends Component {
     render() {
         const level = this.getCurrentLevel();
         return (<div className={"level-wrap"}>
-            <h1>Multimaze Level {this.state.currentLevel + 1}: {level.name}</h1>
+            <h1 style={{display: "flex", justifyContent: "center"}}>Multimaze Level {this.state.currentLevel + 1}: {level.name}</h1>
             <Level key={this.state.gameCount} levelId={level.id} name={level.name} definition={level.definition} inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)} />
         </div>)
     }
