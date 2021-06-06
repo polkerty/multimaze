@@ -57,9 +57,7 @@ export default class Level extends Component {
             if (newContents.includes(TOKEN.PLAYER1)){
                 newContents.splice(newContents.indexOf(TOKEN.PLAYER1), 1);
             }
-            if (newBoard[x][y].includes(TOKEN.PLAYER1)){
-                newContents.push(TOKEN.PLAYER1)
-            }
+
             if (this.canAcceptPlayer(newX, newY)) {
                 let playerIndex = this.state.board[x][y].indexOf(TOKEN.PLAYER1);
                 if ( playerIndex > -1 ) {
@@ -68,7 +66,10 @@ export default class Level extends Component {
             }
             else {
                    newContents.push(TOKEN.PLAYER1)
-                }
+            }
+            if (newBoard[x][y].includes(TOKEN.PLAYER1) && ! newContents.includes(TOKEN.PLAYER1)){
+                newContents.push(TOKEN.PLAYER1)
+            }
 
             newBoard[x][y] = newContents;
             //removeDuplicatePlayers(newContents)
