@@ -48,6 +48,8 @@ export default class Level extends Component {
             while (newBoard[x][y].includes(TOKEN.PLAYER1)){
                 newBoard[x][y].splice(newBoard[x][y].indexOf(TOKEN.PLAYER1), 1)
             }
+        }
+        for (const [x, y] of playerSquares) {
             let newX = x + dx, newY = y + dy;
             if (!this.isValidPosition(newX, newY)) continue;
 
