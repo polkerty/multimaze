@@ -1,10 +1,8 @@
-export default class LevelConfig {
-    constructor(id, name, definition) {
+export default function LevelConfig (id, name, definition) {
         this.name = name;
         this.definition = definition;
 
         this.id = id;
-    }
 }
 
 
