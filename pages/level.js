@@ -54,6 +54,9 @@ export default class Level extends Component {
                 if ( playerIndex > -1 ) {
                     newContents.splice(playerIndex, 1);
                 }
+                else {
+                    newContents = newContents.filter(x => x !== TOKEN.PLAYER1);
+                }
             }
 
             newBoard[x][y] = newContents;
