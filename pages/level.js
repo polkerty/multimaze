@@ -49,7 +49,7 @@ export default class Level extends Component {
             if (!this.isValidPosition(newX, newY)) continue;
 
             let newContents = softDeepCopy(this.state.board[x][y]);
-            removeDuplicatePlayers(newContents)
+            //removeDuplicatePlayers(newContents)
             if (this.canAcceptPlayer(newX, newY)) {
                 let playerIndex = this.state.board[x][y].indexOf(TOKEN.PLAYER1);
                 if ( playerIndex > -1 ) {
@@ -61,9 +61,9 @@ export default class Level extends Component {
             }
 
             newBoard[x][y] = newContents;
-            removeDuplicatePlayers(newContents)
+            //removeDuplicatePlayers(newContents)
             let [contents, needDeathBye] = this.handleAttemptedMove(newX, newY);
-            removeDuplicatePlayers(contents)
+            //removeDuplicatePlayers(contents)
             newBoard[newX][newY] = contents;
             if (needDeathBye) {
                 deathByes.push([newX, newY]);
