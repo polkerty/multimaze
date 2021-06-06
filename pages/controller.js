@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {defaultLevels} from './levelConfig';
 import Level from "./level";
+import InputHandler from "./inputHandler";
 
 export default class Controller extends Component {
     constructor(props) {
         super(props);
+
+        this.inputHandler = new InputHandler();
 
         this.state = {
             levels: defaultLevels,
@@ -20,7 +23,7 @@ export default class Controller extends Component {
         const level = this.getCurrentLevel();
         return (<div className={"level-wrap"}>
             <h1>Multimaze Level {this.state.currentLevel + 1}: {level.name}</h1>
-            <Level key={level.id} id={level.id} name={level.name} definition={level.definition} />
+            <Level key={level.id} id={level.id} name={level.name} definition={level.definition} inputHandler={this.inputHandler} />
         </div>)
     }
 }
