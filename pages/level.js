@@ -57,7 +57,7 @@ export default class Level extends Component {
             }
 
             let newContents = softDeepCopy(this.state.board[x][y]);
-            if (newContents.includes(TOKEN.PLAYER1)){
+            while (newContents.includes(TOKEN.PLAYER1)){
                 newContents.splice(newContents.indexOf(TOKEN.PLAYER1), 1);
             }
 
