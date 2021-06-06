@@ -39,7 +39,7 @@ export default class Level extends Component {
     }
 
     move(dx, dy) {
-        let newBoard = softDeepCopy(this.state.board);
+        let newBoard = removePlayers(softDeepCopy(this.state.board));
         let playerSquares = this.getPlayerSquares();
 
         let deathByes = [];
@@ -107,6 +107,12 @@ export default class Level extends Component {
 
     removeDuplicatePlayers(arr) {
         if (arr.indexOf(TOKEN.PLAYER1) != arr.lastIndexOf(TOKEN.PLAYER1)){
+            arr.splice(arr.indexOf(TOKEN.PLAYER1),1)
+        }
+    }
+
+    removePlayers(arr) {
+        while (arr.indexOf(TOKEN.PLAYER1) > -1){
             arr.splice(arr.indexOf(TOKEN.PLAYER1),1)
         }
     }
