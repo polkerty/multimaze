@@ -49,7 +49,12 @@ export default class Level extends Component {
             if (!this.isValidPosition(newX, newY)) continue;
 
             let newContents = softDeepCopy(this.state.board[x][y]);
-            if (this.canAcceptPlayer(newX, newY)) newContents = newContents.filter(x => x !== TOKEN.PLAYER1);
+            if (this.canAcceptPlayer(newX, newY)) {
+                let playerIndex = newContents.indexOf(TOKEN.PLAYER1);
+                if ( playerIndex > -1 ) {
+                    newContents.splice(playerIndex, 1);
+                }
+            }
 
             newBoard[x][y] = newContents;
             let [contents, needDeathBye] = this.handleAttemptedMove(newX, newY);
@@ -108,7 +113,7 @@ export default class Level extends Component {
         }
 
 
-        return [[...new Set(tokens)], turnDead];
+        return [[...tokens], turnDead];
     }
 
     render() {
@@ -148,7 +153,6 @@ export default class Level extends Component {
     }
 
     win() {
-        console.log("Lucky you!");
         this.props.announceVictory();
     }
 
