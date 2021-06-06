@@ -21,7 +21,7 @@ export default class Level extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            board: softDeepCopy(props.definition),
+            board: softDeepCopy(props.definition || []),
             deathByes: [],
         }
     }
@@ -142,7 +142,7 @@ export default class Level extends Component {
 
     restart() {
         this.setState({
-            board: softDeepCopy(this.props.definition),
+            board: softDeepCopy(this.props.definition || []),
             deathByes: [],
         })
     }
