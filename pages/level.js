@@ -101,7 +101,7 @@ export default class Level extends Component {
 
         let turnDead = false;
 
-        if (tokens.includes(TOKEN.COLLAPSE)) {
+        if (tokens.includes(TOKEN.COLLAPSE) && this.canAcceptPlayer(x, y)) {
             tokens = tokens.filter(x => x !== TOKEN.COLLAPSE);
             tokens.push(TOKEN.DEATH);
             turnDead = true;
