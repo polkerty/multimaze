@@ -53,6 +53,7 @@ export default class Level extends Component {
             let newX = x + dx, newY = y + dy;
             if (!this.isValidPosition(newX, newY)) {
                 newContents.push(TOKEN.PLAYER1)
+                continue
             }
 
             let newContents = softDeepCopy(this.state.board[x][y]);
