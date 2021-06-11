@@ -26,6 +26,7 @@ export default function Help(props) {
                         the barrier before you can move onto the cell.
                     </li>
                     <li>Once you defeat a level, you'll automatically move up to the next one. Good luck!</li>
+                    <li>You can press 'r' to restart a level or 'x' to skip it.</li>
                 </ul>
             </div>
         </div>
