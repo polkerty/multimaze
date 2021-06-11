@@ -211,7 +211,7 @@ export default class Controller extends Component {
             }}>Multimaze {this.state.groups[this.state.currentGroup].name}
                 <span style={{marginRight: '10px'}}/>
                 {"Level"} {this.state.currentLevel + 1}: {level.name}</h1>
-            {level.description.length ? <p>{level.description}</p> : ''}
+            {level.description.length ? <p style={{textAlign: 'center'}} >{level.description}</p> : ''}
 
             <Level key={this.state.gameCount} levelId={level.id} name={level.name} definition={level.definition}
                    inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>
