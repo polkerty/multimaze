@@ -120,15 +120,20 @@ class InputHandler {
 }
 
 class LevelConfig {
-    constructor(id, name, definition) {
+    constructor(id, name, definition, groups) {
+        this.id = id;
         this.name = name;
         this.definition = definition;
+        this.groups = groups;
     }
 }
 
-const levelDefinitions = require('./levels.json');
-const defaultLevels = levelDefinitions.map(({name, definition}, index) => new LevelConfig(index, name, definition));
-
+const {puzzles, groups} = require('./levels.json');
+const defaultLevels = puzzles.map(({
+                                       name,
+                                       definition,
+                                       groups
+                                   }, index) => new LevelConfig(index, name, definition, groups));
 
 export default class Controller extends Component {
     constructor(props) {
@@ -137,8 +142,14 @@ export default class Controller extends Component {
         this.inputHandler = new InputHandler();
 
         this.state = {
-            levels: defaultLevels,
+            levels: defaultLevels.filter(x => x.groups.includes(0)),
+            groups: groups.map((g, index) => ({
+                name: g,
+                id: index,
+                count: defaultLevels.filter((l) => l.groups.includes(index)).length
+            })),
             currentLevel: 0,
+            currentGroup: 0,
             gameCount: 0
         }
     }
@@ -154,11 +165,30 @@ export default class Controller extends Component {
         })
     }
 
+    setGroup(groupNumber) {
+        let levels = defaultLevels.filter(x => x.groups.includes(groupNumber));
+        this.setState({
+            levels: levels,
+            currentGroup: groupNumber,
+            currentLevel: 0,
+            gameCount: this.state.gameCount + 1
+        })
+    }
+
     render() {
         const level = this.getCurrentLevel();
         return (<div className={"level-wrap"}>
-            <h1 style={{display: "flex", justifyContent: "center"}}>Multimaze
-                Level {this.state.currentLevel + 1}: {level.name}</h1>
+            <div className={"maze-controls"}>
+                <div className={"maze-controls__spacer"}/>
+                <div className={"maze-controls__group-nav"}>
+                    {this.state.groups.filter(x => x.count > 0).map(({name, id, count}) => <div className={"maze-controls__group"}
+                                                                       onClick={() => this.setGroup(id)}>{name} <span className={"number-bubble"} >{count}</span></div>)}
+                </div>
+            </div>
+            <h1 style={{display: "flex", justifyContent: "center"}}>Multimaze { this.state.groups[this.state.currentGroup].name }
+                <span style={{marginRight: '10px'}} />
+                { "Level" } {this.state.currentLevel + 1}: {level.name}</h1>
+
             <Level key={this.state.gameCount} levelId={level.id} name={level.name} definition={level.definition}
                    inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>
         </div>)

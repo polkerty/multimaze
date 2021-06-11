@@ -121,3 +121,71 @@ a {
     background: rgb(255,230,0);
 }
 
+/* Maze controls */
+
+.maze-controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 2px 2px 2px #eee;
+    background: #eeeeee;
+}
+
+.maze-controls__spacer {
+    flex-grow: 1;
+}
+
+.maze-controls__group-nav {
+    display: flex;
+}
+
+.maze-controls__group {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 1.5s;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.maze-controls__group:hover {
+    background: white !important;
+    color: black;
+}
+
+.maze-controls__group:nth-child(1) {
+    background: #007bff;
+}
+
+.maze-controls__group:nth-child(2) {
+    background: #6610f2;
+}
+
+.maze-controls__group:nth-child(3) {
+    background: #dc3545;
+}
+
+.maze-controls__group:nth-child(4) {
+    background: #fd7e14;
+}
+
+.number-bubble {
+    padding: 8px;
+    border-radius: 12px;
+    background: white;
+    color: black;
+    font-size: smaller;
+}
+
+.maze-controls__group .number-bubble {
+    font-size: 12px;
+    margin-left: 10px;
+    padding: 3px 5px;
+    display: block;
+}
