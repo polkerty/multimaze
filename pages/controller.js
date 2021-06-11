@@ -11,21 +11,29 @@ class InputHandler {
         window.addEventListener('keydown', function (e) {
             switch (e.key) {
                 case 'ArrowLeft':
+                case 'a':
                     self.emit('left');
+                    e.preventDefault();
                     break;
                 case 'ArrowRight':
+                case 'd':
                     self.emit('right');
+                    e.preventDefault();
                     break;
                 case 'ArrowUp':
+                case 'w':
                     self.emit('up');
+                    e.preventDefault();
                     break;
                 case 'ArrowDown':
+                case 's':
                     self.emit('down');
+                    e.preventDefault();
                     break;
                 case 'r':
                     self.emit('restart');
                     break;
-                case 'w':
+                case 'x':
                     self.emit('win');
                     break;
                 default:
