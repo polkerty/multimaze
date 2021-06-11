@@ -25,6 +25,10 @@ a {
     max-height: 100%;
     width: 800px;
     /*height: 500px;*/
+    border: 1px solid black;
+    border-radius: 5px;
+    position: relative;
+    z-index: -1;
 }
 
 .level-row {
@@ -35,8 +39,20 @@ a {
 .level-cell {
     flex-grow: 1;
     position: relative;
-    border: 1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    /*border: 1px solid black;*/
 }
+
+.level-cell--sized {
+    position: relative;
+    flex-grow: initial;
+    border: 0;
+}
+
+/*.level-row:nth-of-type(odd) .level-cell:nth-of-type(even), .level-row:nth-of-type(even) .level-cell:nth-of-type(odd) {*/
+/*    background: #ddd;*/
+/*}*/
 
 .level-cell__spacer {
     margin-top: 100%;
@@ -100,7 +116,7 @@ a {
     left: 0;
     top: 0;
     z-index: 0;
-    background: rgb(255,165,0);
+    background: rgb(255, 165, 0);
 }
 
 .level-token--BARRIER {
@@ -118,7 +134,7 @@ a {
     left: 20%;
     top: 20%;
     z-index: 2;
-    background: rgb(255,230,0);
+    background: rgb(255, 230, 0);
 }
 
 /* Maze controls */
@@ -188,4 +204,81 @@ a {
     margin-left: 10px;
     padding: 3px 5px;
     display: block;
+}
+
+.maze-controls__help {
+    padding: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 1.5s;
+    display: flex;
+    align-items: center;
+    color: black;
+    width: 30px;
+    justify-content: center;
+}
+
+.maze-controls__group__help:hover {
+    color: white;
+    background: black;
+}
+
+/* modal */
+
+.help-modal__wrap {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.help-modal__inner {
+    max-width: 100%;
+    max-height: 100%;
+    overflow-y: scroll;
+    width: 800px;
+    height: 500px;
+    box-sizing: border-box;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 12px;
+    background: white;
+    border-radius: 10px;
+    z-index: 2;
+}
+
+
+.help-modal__content ul {
+    list-style: none;
+    line-height: 30px;
+}
+
+.help-modal__content .level-cell {
+    display: inline-block;
+    /*margin-bottom: 0px;*/
+    margin: 0 5px;
+    margin-bottom: -10px;
+}
+
+.help-modal__content .level-cell .level-token {
+    width: 100% !important;
+    height: 100% !important;
+    left: 0 !important;
+    top: 0 !important;
+}
+
+.help-modal__close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
 }

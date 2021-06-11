@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import Level from "./level";
+import {faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import Help from './help'
 
 class InputHandler {
     constructor() {
@@ -120,11 +123,12 @@ class InputHandler {
 }
 
 class LevelConfig {
-    constructor(id, name, definition, groups) {
+    constructor(id, name, definition, groups, description) {
         this.id = id;
         this.name = name;
         this.definition = definition;
         this.groups = groups;
+        this.description = description || '';
     }
 }
 
@@ -132,8 +136,9 @@ const {puzzles, groups} = require('./levels.json');
 const defaultLevels = puzzles.map(({
                                        name,
                                        definition,
-                                       groups
-                                   }, index) => new LevelConfig(index, name, definition, groups));
+                                       groups,
+                                       description
+                                   }, index) => new LevelConfig(index, name, definition, groups, description));
 
 export default class Controller extends Component {
     constructor(props) {
@@ -150,7 +155,8 @@ export default class Controller extends Component {
             })),
             currentLevel: 0,
             currentGroup: 0,
-            gameCount: 0
+            gameCount: 0,
+            showHelp: false
         }
     }
 
@@ -175,19 +181,37 @@ export default class Controller extends Component {
         })
     }
 
+    toggleHelp() {
+        this.setState({
+            showHelp: !this.state.showHelp
+        })
+    }
+
     render() {
         const level = this.getCurrentLevel();
         return (<div className={"level-wrap"}>
             <div className={"maze-controls"}>
-                <div className={"maze-controls__spacer"}/>
+                {
+                    this.state.showHelp ? <Help closeHelp={() => this.toggleHelp()}/> : ''
+                }
                 <div className={"maze-controls__group-nav"}>
-                    {this.state.groups.filter(x => x.count > 0).map(({name, id, count}) => <div className={"maze-controls__group"}
-                                                                       onClick={() => this.setGroup(id)}>{name} <span className={"number-bubble"} >{count}</span></div>)}
+                    {this.state.groups.filter(x => x.count > 0).map(({name, id, count}) => <div
+                        className={"maze-controls__group"}
+                        onClick={() => this.setGroup(id)}>{name} <span className={"number-bubble"}>{count}</span>
+                    </div>)}
+                </div>
+                <div className={"maze-controls__spacer"}/>
+                <div className={"maze-controls__help"} onClick={() => this.toggleHelp()}>
+                    <FontAwesomeIcon icon={faQuestionCircle}/>
                 </div>
             </div>
-            <h1 style={{display: "flex", justifyContent: "center"}}>Multimaze { this.state.groups[this.state.currentGroup].name }
-                <span style={{marginRight: '10px'}} />
-                { "Level" } {this.state.currentLevel + 1}: {level.name}</h1>
+            <h1 style={{
+                display: "flex",
+                justifyContent: "center"
+            }}>Multimaze {this.state.groups[this.state.currentGroup].name}
+                <span style={{marginRight: '10px'}}/>
+                {"Level"} {this.state.currentLevel + 1}: {level.name}</h1>
+            {level.description.length ? <p>{level.description}</p> : ''}
 
             <Level key={this.state.gameCount} levelId={level.id} name={level.name} definition={level.definition}
                    inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>

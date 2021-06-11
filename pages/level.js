@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-const TOKEN = {
+export const TOKEN = {
     WALL: 1,
     PLAYER1: 2,
     FINISH1: 3,
@@ -45,7 +45,7 @@ export default class Level extends Component {
         let deathByes = [];
 
         for (const [x, y] of playerSquares) {
-            while (newBoard[x][y].includes(TOKEN.PLAYER1)){
+            while (newBoard[x][y].includes(TOKEN.PLAYER1)) {
                 newBoard[x][y].splice(newBoard[x][y].indexOf(TOKEN.PLAYER1), 1)
             }
         }
@@ -57,17 +57,16 @@ export default class Level extends Component {
             }
 
             let newContents = softDeepCopy(this.state.board[x][y]);
-            while (newContents.includes(TOKEN.PLAYER1)){
+            while (newContents.includes(TOKEN.PLAYER1)) {
                 newContents.splice(newContents.indexOf(TOKEN.PLAYER1), 1);
             }
 
             if (this.canAcceptPlayer(newX, newY)) {
 
+            } else {
+                newContents.push(TOKEN.PLAYER1)
             }
-            else {
-                   newContents.push(TOKEN.PLAYER1)
-            }
-            if (newBoard[x][y].includes(TOKEN.PLAYER1) && ! newContents.includes(TOKEN.PLAYER1)){
+            if (newBoard[x][y].includes(TOKEN.PLAYER1) && !newContents.includes(TOKEN.PLAYER1)) {
                 newContents.push(TOKEN.PLAYER1)
             }
 
@@ -114,14 +113,14 @@ export default class Level extends Component {
     }
 
     removeDuplicatePlayers(arr) {
-        if (arr.indexOf(TOKEN.PLAYER1) !== arr.lastIndexOf(TOKEN.PLAYER1)){
-            arr.splice(arr.indexOf(TOKEN.PLAYER1),1)
+        if (arr.indexOf(TOKEN.PLAYER1) !== arr.lastIndexOf(TOKEN.PLAYER1)) {
+            arr.splice(arr.indexOf(TOKEN.PLAYER1), 1)
         }
     }
 
     removePlayers(arr) {
-        while (arr.indexOf(TOKEN.PLAYER1) > -1){
-            arr.splice(arr.indexOf(TOKEN.PLAYER1),1)
+        while (arr.indexOf(TOKEN.PLAYER1) > -1) {
+            arr.splice(arr.indexOf(TOKEN.PLAYER1), 1)
         }
     }
 
@@ -191,8 +190,14 @@ export default class Level extends Component {
 
 }
 
-function Cell(props) {
-    return <div className={"level-cell"}>
+export function Cell(props) {
+
+    const style = {};
+    if (props.size) {
+        style.width = props.size + 'px';
+        style.height = props.size + 'px';
+    }
+    return <div style={style} className={"level-cell" + (props.size ? ' level-cell--sized' : '')}>
         <div className={"level-cell__spacer"}/>
         {
             props.def.map((code, index) => <div key={index}
