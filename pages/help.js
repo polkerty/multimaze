@@ -17,7 +17,7 @@ export default function Help(props) {
                     </li>
                     <li>You can move your players left, right, up, or down together by using the arrow keys or WASD.
                     </li>
-                    <li>But you're blocked from moving on to the barriers <Cell def={[TOKEN.BARRIER]} size={30}/>, and
+                    <li>But you're blocked from moving on to the walls <Cell def={[TOKEN.WALL]} size={30}/>, and
                         if you move onto the death squares
                         <Cell def={[TOKEN.DEATH]} size={30}/> you lose. These squares <Cell def={[TOKEN.COLLAPSE]}
                                                                                             size={30}/> turn into death
