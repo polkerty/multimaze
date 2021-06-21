@@ -64,7 +64,7 @@
    {
    "name": "Impossible",
    "groups": [0, 5],
-   "description": "Do not try to win. Instead, hit one of the above tabs like "Classic" to try a new level group. Have fun!",
+   "description": "Do not try to win. Instead, hit one of the above tabs like 'Classic' to try a new level group. Have fun!",
    "definition": [[[1], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7]], [[5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7]], [[5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7]], [[5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7]], [[5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7]], [[5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7], [5, 7]], [[], [1], [1], [1], [1], [1], [1], []], [[2], [1], [1], [1], [1], [1], [1], [3]]]
    },
    {
