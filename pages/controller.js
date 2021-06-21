@@ -154,7 +154,7 @@ export default class Controller extends Component {
                 count: defaultLevels.filter((l) => l.groups.includes(index)).length
             })),
             currentLevel: 0,
-            currentGroup: 0,
+            currentGroup: 5,
             gameCount: 0,
             showHelp: false
         }
