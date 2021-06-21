@@ -70,7 +70,7 @@
    {
    "name": "Intro",
    "groups": [0, 4],
-   "description": "Welcome to the classic levels! These were the first levels ever made in the game: if you've completed the tutorial, you may find the early classics to be very easy, but don't worry, they get tricky!",
+   "description": "Welcome to the classic levels! These were the first levels ever made in the game",
    "definition": [[[1], [], [], [], [], [], [7], []], [[1], [], [], [], [], [1], [1], [1]], [[1], [], [], [], [], [1], [1], [1]], [[1], [5], [4], [5], [4], [1], [1], [1]], [[1], [5], [4], [5], [4], [1], [1], [1]], [[], [], [], [], [], [6], [], []], [[], [2], [], [], [], [6], [], [3]], [[], [], [], [], [], [6], [], []]]
    },
    {
