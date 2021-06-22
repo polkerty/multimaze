@@ -146,15 +146,17 @@ export default class Controller extends Component {
 
         this.inputHandler = new InputHandler();
 
+        const initialGroup = 5;
+
         this.state = {
-            levels: defaultLevels.filter(x => x.groups.includes(0)),
+            levels: defaultLevels.filter(x => x.groups.includes(initialGroup)),
             groups: groups.map((g, index) => ({
                 name: g,
                 id: index,
                 count: defaultLevels.filter((l) => l.groups.includes(index)).length
             })),
             currentLevel: 0,
-            currentGroup: 5,
+            currentGroup: initialGroup,
             gameCount: 0,
             showHelp: false
         }

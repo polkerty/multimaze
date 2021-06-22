@@ -175,20 +175,32 @@ a {
     color: black;
 }
 
-.maze-controls__group:nth-child(1) {
+.maze-controls__group:nth-child(7n) {
     background: #007bff;
 }
 
-.maze-controls__group:nth-child(2) {
+.maze-controls__group:nth-child(7n + 1) {
     background: #6610f2;
 }
 
-.maze-controls__group:nth-child(3) {
+.maze-controls__group:nth-child(7n + 2) {
     background: #dc3545;
 }
 
-.maze-controls__group:nth-child(4) {
+.maze-controls__group:nth-child(7n + 3) {
     background: #fd7e14;
+}
+
+.maze-controls__group:nth-child(7n + 4) {
+    background: #28a745;
+}
+
+.maze-controls__group:nth-child(7n + 5) {
+    background: #e83e8c;
+}
+
+.maze-controls__group:nth-child(7n + 6) {
+    background: #ffc107;
 }
 
 .number-bubble {
