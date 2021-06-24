@@ -29,6 +29,7 @@ a {
     border-radius: 5px;
     position: relative;
     z-index: -1;
+    touch-action: none;
 }
 
 .level-row {
