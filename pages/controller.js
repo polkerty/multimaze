@@ -208,8 +208,7 @@ export default class Controller extends Component {
                 </div>
             </div>
             <h1 style={{
-                display: "flex",
-                justifyContent: "center"
+                textAlign: "center"
             }}>Multimaze {this.state.groups[this.state.currentGroup].name}
                 <span style={{marginRight: '10px'}}/>
                 {"Level"} {this.state.currentLevel + 1}: {level.name}</h1>
