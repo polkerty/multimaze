@@ -15,7 +15,7 @@ export default function Home() {
 
                 <script
                     async
-                    src="https://www.googletagmanager.com/gtag/js?id=G-HGYJEPGY3W"
+                    src="https://www.googletagmanager.com/gtag/js?id=G-04HWXDQBVN"
                 />
 
                 <script
@@ -24,7 +24,7 @@ export default function Home() {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-HGYJEPGY3W', { page_path: window.location.pathname });
+              gtag('config', 'G-04HWXDQBVN', { page_path: window.location.pathname });
             `,
                     }}
                 />
