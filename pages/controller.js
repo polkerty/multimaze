@@ -198,6 +198,7 @@ export default class Controller extends Component {
                 }
                 <div className={"maze-controls__group-nav"}>
                     {this.state.groups.filter(x => x.count > 0).map(({name, id, count}) => <div
+                        key={id}
                         className={"maze-controls__group"}
                         onClick={() => this.setGroup(id)}>{name} <span className={"number-bubble"}>{count}</span>
                     </div>)}

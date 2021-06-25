@@ -39,11 +39,9 @@ export default function Home() {
                 <a
                     href="https://twitter.com/heptadecagon1"
                     target="_blank"
-                    rel="noopener noreferrer"
                 >
-                    By @BerenGunsolus
-                    {/* And @JacobBrazeal */}
-                </a>
+                    &copy; 2021 @BerenGunsolus
+                </a> <span style={{color: 'gray', display: 'flex', fontSize: 'smaller'}} >h/t <a target="_blank" href={"https://jacobbrazeal.com"} >@JacobBrazeal</a></span>
             </footer>
         </div>
     )

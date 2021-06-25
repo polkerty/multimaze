@@ -17,6 +17,10 @@ a {
 
 /* Our styles */
 
+.level-wrap {
+    /*touch-action: none;*/
+}
+
 .level-grid {
     display: flex;
     flex-direction: column;
@@ -28,7 +32,7 @@ a {
     border: 1px solid black;
     border-radius: 5px;
     position: relative;
-    z-index: -1;
+    /*z-index: -1;*/
     touch-action: none;
 }
 
@@ -294,4 +298,8 @@ a {
     font-size: 24px;
     width: 24px;
     height: 24px;
+}
+
+footer a {
+    margin: 0 5px;
 }

@@ -146,7 +146,7 @@ export default class Level extends Component {
 
     render() {
 
-        return <div className={"level-grid"} touchAction={"none"}>
+        return <div className={"level-grid"} >
             {
                 this.state.board.map((row, index) => (<div key={index} className={"level-row"}>
                     {
