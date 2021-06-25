@@ -156,6 +156,7 @@ a {
     box-shadow: 2px 2px 2px #eee;
     background: #eeeeee;
     overflow-x: scroll;
+    z-index: 99;
 }
 
 .maze-controls__spacer {
