@@ -29,6 +29,9 @@ export default function Home() {
                     }}
                 />
 
+                <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"/>
+
+
             </Head>
 
             <main className={styles.main}>
@@ -36,12 +39,23 @@ export default function Home() {
             </main>
 
             <footer className={styles.footer}>
+                <iframe
+                    src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fwww.berengunsolus.com%2F&layout=button_count&size=large&appId=1809798882663411&width=88&height=28"
+                    width="110" height="28" style={{border: 'none', overflow: 'hidden'}} scrolling="no" frameBorder="0"
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"/>
+                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button"
+                   data-size="large" data-text="Check out this cool puzzle game from @heptadecagon1!"
+                   data-url="https://berengunsolus.com/" data-related="https://twitter.com/brazealjacob"
+                   data-show-count="false">Tweet</a>
                 <a
                     href="https://twitter.com/heptadecagon1"
+                    style={{marginRight: '15px'}}
                     target="_blank"
                 >
                     &copy; 2021 @BerenGunsolus
-                </a> <span style={{color: 'gray', display: 'flex', fontSize: 'smaller'}} >h/t <a target="_blank" href={"https://jacobbrazeal.com"} >@JacobBrazeal</a></span>
+                </a> <span style={{color: 'gray', display: 'flex', fontSize: 'smaller'}}>h/t <a target="_blank"
+                                                                                                href={"https://jacobbrazeal.com"}>@JacobBrazeal</a></span>
             </footer>
         </div>
     )
