@@ -69,7 +69,7 @@ export class Board {
 
     }
 
-    animateSequence(seq, wait=1000) {
+    animateSequence(seq, wait=500) {
         if ( !seq.length) return;
         const move = seq[0];
         this.move(move[0], move[1]);
