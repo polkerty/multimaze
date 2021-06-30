@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {Board} from "../utils/ai";
 
 export const TOKEN = {
     WALL: 1,
@@ -20,133 +21,38 @@ function softDeepCopy(object) {
 export default class Level extends Component {
     constructor(props) {
         super(props);
+
+        const grid = softDeepCopy(props.definition || []);
+        this.board = new Board(grid, {
+            onchange: () => this.onchange(),
+            onwin: () => this.win()
+        });
         this.state = {
-            board: softDeepCopy(props.definition || []),
+            board: grid,
             deathByes: [],
         }
     }
 
+    onchange() {
+        this.setState(this.board.state);
+    }
+
     componentDidMount() {
-        this.restart();
+        this.board.restart();
 
         this.props.inputHandler.clearAll();
-        this.props.inputHandler.on('left', () => this.move(0, -1));
-        this.props.inputHandler.on('right', () => this.move(0, 1));
-        this.props.inputHandler.on('up', () => this.move(-1, 0));
-        this.props.inputHandler.on('down', () => this.move(1, 0));
-        this.props.inputHandler.on('restart', () => this.restart());
+        this.props.inputHandler.on('left', () => this.board.move(0, -1));
+        this.props.inputHandler.on('right', () => this.board.move(0, 1));
+        this.props.inputHandler.on('up', () => this.board.move(-1, 0));
+        this.props.inputHandler.on('down', () => this.board.move(1, 0));
+        this.props.inputHandler.on('restart', () => this.board.restart());
         this.props.inputHandler.on('win', () => this.win());
-    }
-
-    move(dx, dy) {
-        let newBoard = softDeepCopy(this.state.board);
-        let playerSquares = this.getPlayerSquares();
-
-        let deathByes = [];
-
-        for (const [x, y] of playerSquares) {
-            while (newBoard[x][y].includes(TOKEN.PLAYER1)) {
-                newBoard[x][y].splice(newBoard[x][y].indexOf(TOKEN.PLAYER1), 1)
-            }
-        }
-        for (const [x, y] of playerSquares) {
-            let newX = x + dx, newY = y + dy;
-            if (!this.isValidPosition(newX, newY)) {
-                newBoard[x][y].push(TOKEN.PLAYER1)
-                continue
-            }
-
-            let newContents = softDeepCopy(this.state.board[x][y]);
-            while (newContents.includes(TOKEN.PLAYER1)) {
-                newContents.splice(newContents.indexOf(TOKEN.PLAYER1), 1);
-            }
-
-            if (this.canAcceptPlayer(newX, newY)) {
-
-            } else {
-                newContents.push(TOKEN.PLAYER1)
-            }
-            if (newBoard[x][y].includes(TOKEN.PLAYER1) && !newContents.includes(TOKEN.PLAYER1)) {
-                newContents.push(TOKEN.PLAYER1)
-            }
-
-            newBoard[x][y] = newContents;
-            //removeDuplicatePlayers(newContents)
-            let [contents, needDeathBye] = this.handleAttemptedMove(newX, newY);
-            //removeDuplicatePlayers(contents)
-            newBoard[newX][newY] = contents;
-            if (needDeathBye) {
-                deathByes.push([newX, newY]);
-            }
-        }
-
-        this.setState({
-            board: newBoard,
-            deathByes: deathByes
-        })
-
-        if (this.isDead()) return this.restart();
-
-        if (this.hasWon()) {
-            this.win();
-        }
-    }
-
-    getPlayerSquares() {
-        let squares = [];
-        for (let i = 0; i < this.state.board.length; ++i) {
-            for (let j = 0; j < this.state.board[i].length; ++j) {
-                if (this.state.board[i][j].includes(TOKEN.PLAYER1)) {
-                    squares.push([i, j]);
-                }
-            }
-        }
-        return squares;
-    }
-
-    isValidPosition(x, y) {
-        return x >= 0 && y >= 0 && x < this.state.board.length && y < this.state.board[x].length;
-    }
-
-    canAcceptPlayer(x, y) {
-        return ![TOKEN.WALL, TOKEN.BARRIER].some(z => (this.state.board[x][y].includes(z)));
-    }
-
-    removeDuplicatePlayers(arr) {
-        if (arr.indexOf(TOKEN.PLAYER1) !== arr.lastIndexOf(TOKEN.PLAYER1)) {
-            arr.splice(arr.indexOf(TOKEN.PLAYER1), 1)
-        }
-    }
-
-    removePlayers(arr) {
-        while (arr.indexOf(TOKEN.PLAYER1) > -1) {
-            arr.splice(arr.indexOf(TOKEN.PLAYER1), 1)
-        }
-    }
-
-    handleAttemptedMove(x, y) {
-        let tokens = softDeepCopy(this.state.board[x][y]);
-        if (this.canAcceptPlayer(x, y)) {
-            tokens.push(TOKEN.PLAYER1);
-        }
-        tokens = tokens.filter(x => x !== TOKEN.BARRIER);
-        tokens = tokens.filter(x => x !== TOKEN.COIN);
-
-        let turnDead = false;
-
-        if (tokens.includes(TOKEN.COLLAPSE) && this.canAcceptPlayer(x, y)) {
-            tokens = tokens.filter(x => x !== TOKEN.COLLAPSE);
-            tokens.push(TOKEN.DEATH);
-            turnDead = true;
-        }
-
-
-        return [[...tokens], turnDead];
+        this.props.inputHandler.on('ai', () => this.board.aiSimple());
     }
 
     render() {
 
-        return <div className={"level-grid"} >
+        return <div className={"level-grid"}>
             {
                 this.state.board.map((row, index) => (<div key={index} className={"level-row"}>
                     {
@@ -157,28 +63,6 @@ export default class Level extends Component {
         </div>
     }
 
-    isDead() {
-        for (let i = 0; i < this.state.board.length; ++i) {
-            for (let j = 0; j < this.state.board[i].length; ++j) {
-                if (this.state.deathByes.some(([x, y]) => x === i && y === j)) continue;
-                if (this.state.board[i][j].includes(TOKEN.DEATH) && this.state.board[i][j].includes(TOKEN.PLAYER1)) return true;
-            }
-        }
-        return false;
-    }
-
-    hasWon() {
-        let coinCountZero = !this.state.board.flat().some(x => x.includes(TOKEN.COIN));
-        let onWinSquares = !this.state.board.flat().some(x => x.includes(TOKEN.PLAYER1) && !x.includes(TOKEN.FINISH1));
-        return coinCountZero && onWinSquares;
-    }
-
-    restart() {
-        this.setState({
-            board: softDeepCopy(this.props.definition || []),
-            deathByes: [],
-        })
-    }
 
     win() {
         this.props.announceVictory();

@@ -39,6 +39,9 @@ class InputHandler {
                 case 'x':
                     self.emit('win');
                     break;
+                case 'o':
+                    self.emit('ai');
+                    break;
                 default:
                 // Life is good, take it easy
             }
