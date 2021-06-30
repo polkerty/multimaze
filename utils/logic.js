@@ -5,6 +5,17 @@ function softDeepCopy(object) {
     return JSON.parse(JSON.stringify(object));
 }
 
+function fastCopy(arr) {
+    let newArr = new Array(arr.length);
+    for ( let i = 0; i < arr.length; ++i ) {
+        newArr[i] = new Array(arr[i].length);
+        for ( let j = 0; j < newArr[i].length; ++j ) {
+            newArr[i][j] = arr[i][j].slice();
+        }
+    }
+    return newArr;
+}
+
 export class Board {
     constructor({grid, deathByes}, {onchange, onwin}) {
 
@@ -21,10 +32,11 @@ export class Board {
     aiSimple(maxIter = 1000000) {
         // Let's get all possible moves.
 
+        const startTime = new Date().getTime();
         console.log("Neighbors: ", this.getNeighbors());
 
         const seen = new Set();
-        const memo = {[this.getHash()]: []}
+        const memo = {[this.getHash()]: 0}
 
         const queue = [[this, []]];
 
@@ -51,8 +63,8 @@ export class Board {
             const neighbors = next.getNeighbors();
             for (const [delta, n] of neighbors) {
                 const nHash = n.getHash();
-                if (!(nHash in memo) || (memo[nHash].length > path.length + 1)) {
-                    memo[nHash] = path.concat([delta]);
+                if (!(nHash in memo) || (memo[nHash] > path.length + 1)) {
+                    memo[nHash] = path.length + 1;
                     queue.push([n, path.concat([delta])]);
                 }
             }
@@ -66,6 +78,8 @@ export class Board {
         } else {
             alert('AI not available for this level');
         }
+
+        console.log("AI runtime (sec): ", (new Date().getTime() - startTime)/1000);
 
     }
 
@@ -83,7 +97,7 @@ export class Board {
     }
 
     hash(str, seed = 0) {
-        // return str;
+        return str;
         let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
         for (let i = 0, ch; i < str.length; i++) {
             ch = str.charCodeAt(i);
@@ -121,7 +135,7 @@ export class Board {
 
 
     move(dx, dy, soft = false) {
-        let newBoard = softDeepCopy(this.state.board);
+        let newBoard = fastCopy(this.state.board);
         let playerSquares = this.getPlayerSquares();
 
         let deathByes = [];
@@ -138,7 +152,7 @@ export class Board {
                 continue
             }
 
-            let newContents = softDeepCopy(this.state.board[x][y]);
+            let newContents = this.state.board[x][y].slice();
             while (newContents.includes(TOKEN.PLAYER1)) {
                 newContents.splice(newContents.indexOf(TOKEN.PLAYER1), 1);
             }
@@ -221,7 +235,7 @@ export class Board {
     }
 
     handleAttemptedMove(x, y) {
-        let tokens = softDeepCopy(this.state.board[x][y]);
+        let tokens = this.state.board[x][y].slice();
         if (this.canAcceptPlayer(x, y)) {
             tokens.push(TOKEN.PLAYER1);
         }
