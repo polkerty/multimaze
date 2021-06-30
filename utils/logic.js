@@ -6,20 +6,74 @@ function softDeepCopy(object) {
 }
 
 export class Board {
-    constructor(grid, {onchange, onwin}) {
+    constructor({grid, deathByes}, {onchange, onwin}) {
 
         this.definition = grid;
         this.state = {
             board: grid,
-            deathBytes: []
+            deathByes: deathByes || []
         };
 
         this.onchange = onchange;
         this.onwin = onwin;
     }
 
-    aiSimple() {
+    aiSimple(maxIter = 1000000) {
+        // Let's get all possible moves.
 
+        console.log("Neighbors: ", this.getNeighbors());
+
+        const seen = new Set();
+        const memo = {[this.getHash()]: []}
+
+        const queue = [[this, []]];
+
+        let best = {
+            target: null,
+            path: []
+        }
+
+        let i = 0;
+        while (queue.length && i++ < maxIter) {
+            const [next, path] = queue.pop();
+            const hash = next.getHash();
+            if (seen.has(hash)) {
+                continue;
+            }
+            if (next.hasWon() && (!best.target || path.length < best.path.length)) {
+                best = {
+                    target: next,
+                    path: path
+                }
+            }
+
+            seen.add(hash);
+            const neighbors = next.getNeighbors();
+            for (const [delta, n] of neighbors) {
+                const nHash = n.getHash();
+                if (!(nHash in memo) || (memo[nHash].length > path.length + 1)) {
+                    memo[nHash] = path.concat([delta]);
+                    queue.push([n, path.concat([delta])]);
+                }
+            }
+        }
+
+        console.log(memo, Object.values(memo).length, best, best.target?.hasWon());
+
+        if (best.target) {
+            this.animateSequence(best.path);
+            // this.move(best.path[0][0], best.path[0][1]);
+        } else {
+            alert('AI not available for this level');
+        }
+
+    }
+
+    animateSequence(seq, wait=1000) {
+        if ( !seq.length) return;
+        const move = seq[0];
+        this.move(move[0], move[1]);
+        setTimeout(()=>this.animateSequence(seq.slice(1), wait), wait)
     }
 
     win() {
@@ -28,8 +82,45 @@ export class Board {
         }
     }
 
+    hash(str, seed = 0) {
+        return str;
+        let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+        for (let i = 0, ch; i < str.length; i++) {
+            ch = str.charCodeAt(i);
+            h1 = Math.imul(h1 ^ ch, 2654435761);
+            h2 = Math.imul(h2 ^ ch, 1597334677);
+        }
+        h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+        h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+        return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+    }
 
-    move(dx, dy) {
+    getHash() {
+        return this.hash(JSON.stringify(this.state));
+    }
+
+
+    getNeighbors() {
+        const possibleDeltas = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+        let seen = new Set();
+
+        let neighbors = possibleDeltas.map(([dx, dy]) => [[dx, dy], this.move(dx, dy, true)]);
+        neighbors = neighbors.filter(([, b]) => {
+            const hash = b.getHash();
+            if (seen.has(hash)) return false;
+            if (b.isDead()) return false;
+            seen.add(hash);
+            return true;
+        })
+
+
+        return neighbors;
+
+    }
+
+
+    move(dx, dy, soft = false) {
         let newBoard = softDeepCopy(this.state.board);
         let playerSquares = this.getPlayerSquares();
 
@@ -69,6 +160,13 @@ export class Board {
             if (needDeathBye) {
                 deathByes.push([newX, newY]);
             }
+        }
+
+        if (soft) {
+            return new Board({
+                grid: newBoard,
+                deathByes: deathByes
+            }, {})
         }
 
         this.setState({

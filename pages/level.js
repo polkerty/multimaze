@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Board} from "../utils/ai";
+import {Board} from "../utils/logic";
 
 export const TOKEN = {
     WALL: 1,
@@ -23,7 +23,7 @@ export default class Level extends Component {
         super(props);
 
         const grid = softDeepCopy(props.definition || []);
-        this.board = new Board(grid, {
+        this.board = new Board({grid}, {
             onchange: () => this.onchange(),
             onwin: () => this.win()
         });
