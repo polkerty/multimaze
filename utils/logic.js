@@ -27,9 +27,17 @@ export class Board {
 
         this.onchange = onchange;
         this.onwin = onwin;
+
+        this.aiLoop = 0;
     }
 
     aiSimple(maxIter = 1000000) {
+
+        if ( this.aiLoop) {
+            clearTimeout(this.aiLoop);
+            this.aiLoop = null;
+            return;
+        }
         // Let's get all possible moves.
 
         const startTime = new Date().getTime();
@@ -87,10 +95,14 @@ export class Board {
     }
 
     animateSequence(seq, wait=500) {
-        if ( !seq.length) return;
+        if ( !seq.length) {
+            clearTimeout(this.aiLoop);
+            this.aiLoop = null;
+            return;
+        }
         const move = seq[0];
         this.move(move[0], move[1]);
-        setTimeout(()=>this.animateSequence(seq.slice(1), wait), wait)
+        this.aiLoop = setTimeout(()=>this.animateSequence(seq.slice(1), wait), wait)
     }
 
     win() {
@@ -136,6 +148,9 @@ export class Board {
 
     }
 
+    availableForMoves() {
+        return !this.aiLoop;
+    }
 
     move(dx, dy, soft = false) {
         let newBoard = fastCopy(this.state.board);

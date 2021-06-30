@@ -41,12 +41,12 @@ export default class Level extends Component {
         this.board.restart();
 
         this.props.inputHandler.clearAll();
-        this.props.inputHandler.on('left', () => this.board.move(0, -1));
-        this.props.inputHandler.on('right', () => this.board.move(0, 1));
-        this.props.inputHandler.on('up', () => this.board.move(-1, 0));
-        this.props.inputHandler.on('down', () => this.board.move(1, 0));
-        this.props.inputHandler.on('restart', () => this.board.restart());
-        this.props.inputHandler.on('win', () => this.win());
+        this.props.inputHandler.on('left', () => this.board.availableForMoves() && this.board.move(0, -1));
+        this.props.inputHandler.on('right', () => this.board.availableForMoves() && this.board.move(0, 1));
+        this.props.inputHandler.on('up', () => this.board.availableForMoves() && this.board.availableForMoves() && this.board.move(-1, 0));
+        this.props.inputHandler.on('down', () => this.board.availableForMoves() && this.board.move(1, 0));
+        this.props.inputHandler.on('restart', () => this.board.availableForMoves() && this.board.restart());
+        this.props.inputHandler.on('win', () => this.board.availableForMoves() && this.win());
         this.props.inputHandler.on('ai', () => this.board.aiSimple());
     }
 
