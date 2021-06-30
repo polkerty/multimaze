@@ -47,6 +47,9 @@ export class Board {
 
         let i = 0;
         while (queue.length && i++ < maxIter) {
+
+            if ( i > 50000 && best.target) break;
+
             const [next, path] = queue.pop();
             const hash = next.getHash();
             if (seen.has(hash)) {
