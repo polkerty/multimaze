@@ -213,7 +213,7 @@ export default class Controller extends Component {
             </div>
             <h1 style={{
                 textAlign: "center"
-            }}>Multimaze {this.state.groups[this.state.currentGroup].name}
+            }}>{this.state.groups[this.state.currentGroup].name}
                 <span style={{marginRight: '10px'}}/>
                 {"Level"} {this.state.currentLevel + 1}: {level.name}</h1>
             {level.description.length ? <p style={{textAlign: 'center'}} >{level.description}</p> : ''}
