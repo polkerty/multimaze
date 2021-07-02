@@ -6,7 +6,9 @@ export default async (req, res) => {
 
     const payload = JSON.parse(req.body);
 
+    const ip = req.headers['x-forwarded-for'] || null;
     if (process.env.SAVE_ENDPOINT) {
+        payload.ip = ip;
         console.log(payload);
         console.log(process.env.SAVE_ENDPOINT);
         const submitResults = await fetch(process.env.SAVE_ENDPOINT, {
