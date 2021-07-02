@@ -25,7 +25,7 @@ export default class Level extends Component {
         const grid = softDeepCopy(props.definition || []);
         this.board = new Board({grid}, {
             onchange: () => this.onchange(),
-            onwin: () => this.win()
+            onwin: (props) => this.win(props)
         });
         this.state = {
             board: grid,

@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-export default (req, res) => {
+export default async (req, res) => {
 
   // We've got a payload
 
@@ -9,6 +9,13 @@ export default (req, res) => {
   console.log(payload);
 
   console.log(process.env.SAVE_ENDPOINT);
-  res.statusCode = 200
+
+  const submitResults = await fetch(process.env.SAVE_ENDPOINT, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  }).then(x => x.text())
+
+  console.log("API submit results: ", submitResults);
+  res.statusCode = 200;
   res.json({ ok: true });
 }

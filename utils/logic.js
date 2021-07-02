@@ -111,6 +111,7 @@ export class Board {
 
     win() {
         if (this.onwin) {
+            console.log("You finished! ", "Did you cheat? (I really hope not!)", this, this.didCheat);
             this.onwin({
                 didCheat: this.didCheat
             })
@@ -135,7 +136,7 @@ export class Board {
     }
 
     getInitialHash() {
-        return this.hash(JSON.stringify({
+        return btoa(JSON.stringify({
             board: this.definition,
             deathByes: 0
         }))
