@@ -50,6 +50,10 @@ export default class Level extends Component {
         this.props.inputHandler.on('win', () => this.board.availableForMoves() && this.win({
             isSkip: 1
         }));
+        this.props.inputHandler.on('back', () => this.board.availableForMoves() && this.win({
+            retreat: 1,
+            isSkip: 1
+        }));
         this.props.inputHandler.on('ai', () => this.board.aiSimple());
     }
 
@@ -70,12 +74,14 @@ export default class Level extends Component {
     win(props={}) {
         props = Object.assign({
             isSkip: 0,
+            retreat: 0,
             didCheat: 0,
             totalMoves: -1
         }, props);
         this.props.announceVictory({
             gameId: this.board.getInitialHash(),
             isSkip: props.isSkip,
+            retreat: props.retreat,
             startTime: this.state.startTime,
             didCheat: props.didCheat,
             runTime: (new Date().getTime() - this.state.startTime)/1000,

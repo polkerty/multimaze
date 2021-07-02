@@ -1,8 +1,12 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import Controller from "./controller";
 
-import Level from './level';
+// import dynamic from 'next/dynamic'
+
+import Controller from './controller'
+
+// const Controller = dynamic(() => import('./controller'))
+
 
 export default function Home() {
 

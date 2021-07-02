@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import Level from "./level";
+// import Level from "./level";
 import {faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Help from './help'
+import Level from './level'
 
 class InputHandler {
     constructor() {
@@ -36,11 +37,21 @@ class InputHandler {
                 case 'r':
                     self.emit('restart');
                     break;
-                case 'x':
-                    self.emit('win');
+                case 'X':
+                    console.log("X? ", e.shiftKey);
+                    if (e.shiftKey) {
+                        self.emit('win');
+                    }
                     break;
-                case 'o':
-                    self.emit('ai');
+                case 'Z':
+                    if (e.shiftKey) {
+                        self.emit('back');
+                    }
+                    break;
+                case 'O':
+                    if (e.shiftKey) {
+                        self.emit('ai');
+                    }
                     break;
                 default:
                 // Life is good, take it easy
@@ -149,7 +160,7 @@ export default class Controller extends Component {
 
         this.inputHandler = new InputHandler();
 
-        const initialGroup = 5;
+        const initialGroup = 5, initialLevel = 0;
 
         this.state = {
             levels: defaultLevels.filter(x => x.groups.includes(initialGroup)),
@@ -158,10 +169,19 @@ export default class Controller extends Component {
                 id: index,
                 count: defaultLevels.filter((l) => l.groups.includes(index)).length
             })),
-            currentLevel: 0,
+            currentLevel: initialLevel,
             currentGroup: initialGroup,
             gameCount: 0,
             showHelp: false
+        }
+
+    }
+
+    componentDidMount() {
+        if (typeof window !== 'undefined') {
+            const initialGroup = typeof localStorage !== 'undefined' && localStorage.mmGroup ? parseInt(localStorage.mmGroup) : 5;
+            const initialLevel = typeof localStorage !== 'undefined' && localStorage.mmLevel ? parseInt(localStorage.mmLevel) : 0;
+            this.updateGroupAndLevel(initialGroup, initialLevel)
         }
     }
 
@@ -180,7 +200,9 @@ export default class Controller extends Component {
             })
         })
 
-        this.updateGroupAndLevel(this.state.group, (this.state.currentLevel + 1) % this.state.levels.length)
+        const levelShift = props.retreat ? -1 : 1;
+
+        this.updateGroupAndLevel(this.state.currentGroup, (this.state.currentLevel + levelShift + this.state.levels.length) % this.state.levels.length)
     }
 
     setGroup(groupNumber) {
@@ -192,6 +214,7 @@ export default class Controller extends Component {
         localStorage.mmLevel = level;
 
         let levels = defaultLevels.filter(x => x.groups.includes(group));
+
         this.setState({
             levels: levels,
             currentGroup: group,
@@ -199,10 +222,6 @@ export default class Controller extends Component {
             gameCount: this.state.gameCount + 1
         })
 
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log(prevProps, prevState, snapshot);
     }
 
     toggleHelp() {
@@ -242,4 +261,3 @@ export default class Controller extends Component {
         </div>)
     }
 }
-
