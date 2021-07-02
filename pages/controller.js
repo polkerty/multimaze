@@ -39,6 +39,9 @@ class InputHandler {
                 case 'x':
                     self.emit('win');
                     break;
+                case 'z':
+                    self.emit('back');
+                    break;
                 case 'o':
                     self.emit('ai');
                     break;
@@ -179,9 +182,9 @@ export default class Controller extends Component {
                 levelNumber: this.state.currentLevel,
             })
         })
-
+        const levelShift = props.retreat ? -1 : 1;
         this.setState({
-            currentLevel: (this.state.currentLevel + 1) % this.state.levels.length,
+            currentLevel: (this.state.currentLevel + levelShift + this.state.levels.length) % this.state.levels.length,
             gameCount: this.state.gameCount + 1
         })
     }
@@ -233,4 +236,3 @@ export default class Controller extends Component {
         </div>)
     }
 }
-
