@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 // import Level from "./level";
-import {faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
+import {faQuestionCircle, faTrophy} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Help from './help'
 import Level from './level'
@@ -268,8 +268,9 @@ export default class Controller extends Component {
                 <span style={{marginRight: '10px'}}/>
                 {"Level"} {this.state.currentLevel + 1}: {level.name}
                 {this.state.tab === 'game'
-                    ? <a className="game-tab" onClick={() => this.setTab('leaderboard')}
-                         href={'#'}>Leaderboard</a>
+                    ? <a className="trophy-tab" onClick={() => this.setTab('leaderboard')}
+                         href={'#'}> <FontAwesomeIcon icon={faTrophy}/>
+                    </a>
                     : <a className={"game-tab"} onClick={() => this.setTab('game')
                     } href={'#'}>Play</a>}
             </h1>
