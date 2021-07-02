@@ -113,7 +113,6 @@ export class Board {
 
     win() {
         if (this.onwin) {
-            console.log("You finished! ", "Did you cheat? (I really hope not!)", this, this.didCheat);
             this.onwin({
                 didCheat: this.didCheat,
                 totalMoves: this.totalMoves

@@ -180,20 +180,29 @@ export default class Controller extends Component {
             })
         })
 
-        this.setState({
-            currentLevel: (this.state.currentLevel + 1) % this.state.levels.length,
-            gameCount: this.state.gameCount + 1
-        })
+        this.updateGroupAndLevel(this.state.group, (this.state.currentLevel + 1) % this.state.levels.length)
     }
 
     setGroup(groupNumber) {
-        let levels = defaultLevels.filter(x => x.groups.includes(groupNumber));
+        this.updateGroupAndLevel(groupNumber, 0);
+    }
+
+    updateGroupAndLevel(group, level) {
+        localStorage.mmGroup = group;
+        localStorage.mmLevel = level;
+
+        let levels = defaultLevels.filter(x => x.groups.includes(group));
         this.setState({
             levels: levels,
-            currentGroup: groupNumber,
-            currentLevel: 0,
+            currentGroup: group,
+            currentLevel: level,
             gameCount: this.state.gameCount + 1
         })
+
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log(prevProps, prevState, snapshot);
     }
 
     toggleHelp() {
