@@ -53,6 +53,9 @@ class InputHandler {
                         self.emit('ai');
                     }
                     break;
+                case 'u':
+                    self.emit('undo')
+                    break;
                 default:
                 // Life is good, take it easy
             }

@@ -25,6 +25,8 @@ export class Board {
             deathByes: deathByes || []
         };
 
+        this.stack = [];
+
         this.totalMoves = 0;
 
         this.onchange = onchange;
@@ -219,6 +221,8 @@ export class Board {
 
         this.totalMoves++;
 
+        this.stack.push(softDeepCopy(this.state));
+
         this.setState({
             board: newBoard,
             deathByes: deathByes
@@ -229,6 +233,11 @@ export class Board {
         if (this.hasWon()) {
             this.win();
         }
+    }
+
+    undo() {
+        if ( !this.stack.length ) return;
+        this.setState(this.stack.pop());
     }
 
     setState(state) {

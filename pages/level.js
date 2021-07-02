@@ -25,7 +25,8 @@ export default class Level extends Component {
         const grid = softDeepCopy(props.definition || []);
         this.board = new Board({grid}, {
             onchange: () => this.onchange(),
-            onwin: (props) => this.win(props)
+            onwin: (props) => this.win(props),
+            onundo: () => this.onundo()
         });
         this.state = {
             board: grid,
@@ -55,6 +56,7 @@ export default class Level extends Component {
             isSkip: 1
         }));
         this.props.inputHandler.on('ai', () => this.board.aiSimple());
+        this.props.inputHandler.on('undo', () => this.board.availableForMoves() && this.board.undo());
     }
 
     render() {
@@ -70,8 +72,12 @@ export default class Level extends Component {
         </div>
     }
 
+    onundo() {
 
-    win(props={}) {
+    }
+
+
+    win(props = {}) {
         props = Object.assign({
             isSkip: 0,
             retreat: 0,
@@ -84,7 +90,7 @@ export default class Level extends Component {
             retreat: props.retreat,
             startTime: this.state.startTime,
             didCheat: props.didCheat,
-            runTime: (new Date().getTime() - this.state.startTime)/1000,
+            runTime: (new Date().getTime() - this.state.startTime) / 1000,
             totalMoves: props.totalMoves
         });
     }
