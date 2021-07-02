@@ -33,7 +33,8 @@ COLLAPSE_COLOR = ORANGE
 BARRIER_COLOR = DARK_GREY
 COIN_COLOR = YELLOW
 #a sort of purple
-PLAYER2_COLOR = (107, 52, 235)
+PLAYER2_COLOR = (128, 0, 128)
+PLAYER_BOTH = (107, 52, 235)
 PILL_COLOR = (235, 52, 220)
 
 #KEY FOR INTERPRETING ARRAY
@@ -235,16 +236,19 @@ class Level():
             for j in i:
                 if (2 in j or -2 in j or PLAYER2 in j or -PLAYER2 in j) and 4 in j:
                     return True
-                if ((2 in j or -2 in j) and (PLAYER2 in j or -PLAYER2 in j)):
-                    return True
+                #if ((2 in j or -2 in j) and (PLAYER2 in j or -PLAYER2 in j)):
+                #    return True
         return False
     
     def test_explosion(self):
+        return False
+        '''
         for i in self.board:
             for j in i:
                 if ((2 in j or -2 in j) and (PLAYER2 in j or -PLAYER2 in j)):
                     return True
         return False
+        '''
 
     def collapse_to_death(self):
         for i in range(self.num_rows):
@@ -310,12 +314,15 @@ def drawGrid(screen, board):
             if 6 in board[row][col]:
                 r = pygame.Rect((col*GRID_SIZE+6, row*GRID_SIZE+6), (GRID_SIZE-12, GRID_SIZE-12))
                 pygame.draw.rect(screen, BARRIER_COLOR, r)
-            if 2 in board[row][col]:
+            if 2 in board[row][col] and not PLAYER2 in board[row][col]:
                 r = pygame.Rect((col*GRID_SIZE+6, row*GRID_SIZE+6), (GRID_SIZE-12, GRID_SIZE-12))
                 pygame.draw.rect(screen, PLAYER_COLOR, r)
-            if PLAYER2 in board[row][col]:
+            if PLAYER2 in board[row][col] and not 2 in board[row][col]:
                 r = pygame.Rect((col*GRID_SIZE+6, row*GRID_SIZE+6), (GRID_SIZE-12, GRID_SIZE-12))
                 pygame.draw.rect(screen, PLAYER2_COLOR, r)
+            if 2 in board[row][col] and PLAYER2 in board[row][col]:
+                r = pygame.Rect((col*GRID_SIZE+6, row*GRID_SIZE+6), (GRID_SIZE-12, GRID_SIZE-12))
+                pygame.draw.rect(screen, PLAYER_BOTH, r)
             if 7 in board[row][col]:
                 r = pygame.Rect((col*GRID_SIZE+8, row*GRID_SIZE+8), (GRID_SIZE-16, GRID_SIZE-16))
                 pygame.draw.rect(screen, COIN_COLOR, r)
@@ -424,7 +431,7 @@ def play_level(level_original):
             if event.type == pygame.KEYDOWN and event.key == pygame.K_l:
                 level = copy.deepcopy(saved_level)
                 board = level.board
-            if level.lost() or explosion or level.test_explosion():
+            if level.lost() or level.test_explosion(): #Have "or explosion" here to have strong canceling: change some code elsewhere
                 level = copy.deepcopy(level_original)
                 board = level.board
                 explosion = False
