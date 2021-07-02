@@ -7,20 +7,22 @@ export default async (req, res) => {
     const payload = JSON.parse(req.body);
 
     const ip = req.headers['x-forwarded-for'] || null;
-    if (process.env.SAVE_ENDPOINT) {
+    res.statusCode = 200;
+    if (process.env.LEADERBOARD_ENDPOINT) {
         payload.ip = ip;
         console.log(payload);
         console.log(process.env.SAVE_ENDPOINT);
-        const submitResults = await fetch(process.env.SAVE_ENDPOINT, {
+        const leaderboard = await fetch(process.env.LEADERBOARD_ENDPOINT, {
             method: 'POST',
             body: JSON.stringify(payload)
-        }).then(x => x.text())
+        }).then(x => x.json())
 
-        console.log("API submit results: ", submitResults);
+        res.json(leaderboard)
+
+        console.log("Leaderboard fetch results: ", leaderboard);
     } else {
-        // console.log("No save API provided");
+        res.json([]);
+
     }
 
-    res.statusCode = 200;
-    res.json({ok: true});
 }

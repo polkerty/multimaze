@@ -4,6 +4,8 @@ import {faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Help from './help'
 import Level from './level'
+import Leaderboard from "./leaderboard";
+import {Board} from "../utils/logic";
 
 class InputHandler {
     constructor() {
@@ -175,7 +177,8 @@ export default class Controller extends Component {
             currentLevel: initialLevel,
             currentGroup: initialGroup,
             gameCount: 0,
-            showHelp: false
+            showHelp: false,
+            tab: "game"
         }
 
     }
@@ -233,8 +236,17 @@ export default class Controller extends Component {
         })
     }
 
+    setTab(tab) {
+        this.setState({
+            tab: tab
+        });
+
+        return false; // To prevent page from jumping when this method is set as the event handler
+    }
+
     render() {
         const level = this.getCurrentLevel();
+
         return (<div className={"level-wrap"}>
             <div className={"maze-controls"}>
                 {
@@ -252,15 +264,28 @@ export default class Controller extends Component {
                     <FontAwesomeIcon icon={faQuestionCircle}/>
                 </div>
             </div>
-            <h1 style={{
-                textAlign: "center"
-            }}>{this.state.groups[this.state.currentGroup].name}
+            <h1 className={"game-title"}>{this.state.groups[this.state.currentGroup].name}
                 <span style={{marginRight: '10px'}}/>
-                {"Level"} {this.state.currentLevel + 1}: {level.name}</h1>
+                {"Level"} {this.state.currentLevel + 1}: {level.name}
+                {this.state.tab === 'game'
+                    ? <a className="game-tab" onClick={() => this.setTab('leaderboard')}
+                         href={'#'}>Leaderboard</a>
+                    : <a className={"game-tab"} onClick={() => this.setTab('game')
+                    } href={'#'}>Play</a>}
+            </h1>
             {level.description.length ? <p style={{textAlign: 'center'}}>{level.description}</p> : ''}
 
-            <Level key={this.state.gameCount} levelId={level.id} name={level.name} definition={level.definition}
-                   inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>
+            {this.state.tab === 'game'
+                ? <Level key={this.state.gameCount} levelId={level.id} name={level.name} definition={level.definition}
+                         inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>
+                : <Leaderboard levelId={level.id} key={this.state.gameCount} gameId={this.getCurrentGameId()}/>
+
+            }
         </div>)
+    }
+
+    getCurrentGameId() {
+        const level = this.getCurrentLevel();
+        return new Board({grid: level.definition}, {}).getInitialHash();
     }
 }
