@@ -57,9 +57,9 @@ export default class Leaderboard extends Component {
         if (!this.state.leaders.length) return <center>Be the first to beat the level!</center>
 
         return <div className={"leaderboard-wrap"}>
-            {this.state.leaders.map(({time, isYou}, index) => {
+            {this.state.leaders.map(({time, isYou, place}) => {
                 return <div className={"leaderboard-entry"}>
-                    <span className={"leaderboard-position"}>#{index + 1}</span>
+                    <span className={"leaderboard-position"}>#{place + 1}</span>
                     <span
                         className={"leaderboard-name " + (isYou ? 'leaderboard-name--me' : '')}>{isYou ? 'Me' : 'Anonymous'}</span>
                     <span className={"leaderboard-time"}>{this.toHHMMSS(time)}</span>
