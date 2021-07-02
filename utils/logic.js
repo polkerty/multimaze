@@ -35,6 +35,7 @@ export class Board {
         this.aiLoop = 0;
 
         this.didCheat = 0;
+        this.didUndo = 0;
     }
 
     aiSimple(maxIter = 1000000) {
@@ -117,6 +118,7 @@ export class Board {
         if (this.onwin) {
             this.onwin({
                 didCheat: this.didCheat,
+                didUndo: this.didUndo,
                 totalMoves: this.totalMoves
             })
         }
@@ -237,6 +239,7 @@ export class Board {
 
     undo() {
         if ( !this.stack.length ) return;
+        this.didUndo = true;
         this.setState(this.stack.pop());
     }
 

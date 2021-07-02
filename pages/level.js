@@ -82,7 +82,8 @@ export default class Level extends Component {
             isSkip: 0,
             retreat: 0,
             didCheat: 0,
-            totalMoves: -1
+            totalMoves: -1,
+            didUndo: 0
         }, props);
         this.props.announceVictory({
             gameId: this.board.getInitialHash(),
@@ -90,6 +91,7 @@ export default class Level extends Component {
             retreat: props.retreat,
             startTime: this.state.startTime,
             didCheat: props.didCheat,
+            didUndo: props.didUndo,
             runTime: (new Date().getTime() - this.state.startTime) / 1000,
             totalMoves: props.totalMoves
         });
