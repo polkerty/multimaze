@@ -323,3 +323,32 @@ footer a {
 #twitter-widget-0 {
     margin-right: 15px;
 }
+
+.undo-button {
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border: 1px solid #888;
+    border-radius: 50%;
+    padding: 10px;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.undo-button:hover {
+    background: #0070f3;
+    color: white;
+}
+
+.undo-button:focus {
+    background: black;
+    color: white;
+}
+
+.level-controls {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}

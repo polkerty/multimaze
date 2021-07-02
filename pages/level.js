@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import {Board} from "../utils/logic";
+import {faUndo, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 export const TOKEN = {
     WALL: 1,
@@ -61,15 +63,22 @@ export default class Level extends Component {
 
     render() {
 
-        return <div className={"level-grid"}>
-            {
-                this.state.board.map((row, index) => (<div key={index} className={"level-row"}>
-                    {
-                        row.map((cell, index) => <Cell key={index} def={cell}/>)
-                    }
-                </div>))
-            }
-        </div>
+        return (<>
+            <div className={"level-grid"}>
+                {
+                    this.state.board.map((row, index) => (<div key={index} className={"level-row"}>
+                        {
+                            row.map((cell, index) => <Cell key={index} def={cell}/>)
+                        }
+                    </div>))
+                }
+            </div>
+            <div className={"level-controls"}>
+                {this.board.stack.length ?
+                    <button className={"undo-button"} onClick={() => this.board.undo()}><FontAwesomeIcon icon={faUndo}/>
+                    </button> : ''}
+            </div>
+        </>)
     }
 
     onundo() {
@@ -77,7 +86,9 @@ export default class Level extends Component {
     }
 
 
-    win(props = {}) {
+    win(props =
+            {}
+    ) {
         props = Object.assign({
             isSkip: 0,
             retreat: 0,
