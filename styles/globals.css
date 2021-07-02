@@ -425,3 +425,9 @@ footer a {
     color: white;
 }
 
+.leaderboard-entry--me {
+    border: 1px solid #eeeeee;
+    border-radius: 3px;
+    padding: 5px;
+    background: lightskyblue;
+}

@@ -58,7 +58,7 @@ export default class Leaderboard extends Component {
 
         return <div className={"leaderboard-wrap"}>
             {this.state.leaders.map(({time, isYou, place}) => {
-                return <div className={"leaderboard-entry"}>
+                return <div className={"leaderboard-entry " + (isYou ? 'leaderboard-entry--me' : '')}>
                     <span className={"leaderboard-position"}>#{place + 1}</span>
                     <span
                         className={"leaderboard-name " + (isYou ? 'leaderboard-name--me' : '')}>{isYou ? 'Me' : 'Anonymous'}</span>
