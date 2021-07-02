@@ -169,7 +169,17 @@ export default class Controller extends Component {
         return this.state.levels[this.state.currentLevel];
     }
 
-    onCurrentLevelWin() {
+    onCurrentLevelWin(props) {
+        // Save
+        fetch('/api/save', {
+            method: 'POST',
+            body: JSON.stringify({
+                ...props,
+                groupNumber: this.state.currentGroup,
+                levelNumber: this.state.currentLevel,
+            })
+        })
+
         this.setState({
             currentLevel: (this.state.currentLevel + 1) % this.state.levels.length,
             gameCount: this.state.gameCount + 1
@@ -216,7 +226,7 @@ export default class Controller extends Component {
             }}>Multimaze {this.state.groups[this.state.currentGroup].name}
                 <span style={{marginRight: '10px'}}/>
                 {"Level"} {this.state.currentLevel + 1}: {level.name}</h1>
-            {level.description.length ? <p style={{textAlign: 'center'}} >{level.description}</p> : ''}
+            {level.description.length ? <p style={{textAlign: 'center'}}>{level.description}</p> : ''}
 
             <Level key={this.state.gameCount} levelId={level.id} name={level.name} definition={level.definition}
                    inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>

@@ -29,9 +29,13 @@ export class Board {
         this.onwin = onwin;
 
         this.aiLoop = 0;
+
+        this.didCheat = 0;
     }
 
     aiSimple(maxIter = 1000000) {
+
+        this.didCheat = 1;
 
         if ( this.aiLoop) {
             clearTimeout(this.aiLoop);
@@ -107,7 +111,9 @@ export class Board {
 
     win() {
         if (this.onwin) {
-            this.onwin()
+            this.onwin({
+                didCheat: this.didCheat
+            })
         }
     }
 
@@ -126,6 +132,13 @@ export class Board {
 
     getHash() {
         return this.hash(JSON.stringify(this.state));
+    }
+
+    getInitialHash() {
+        return this.hash(JSON.stringify({
+            board: this.definition,
+            deathByes: 0
+        }))
     }
 
 

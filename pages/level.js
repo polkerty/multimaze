@@ -30,6 +30,7 @@ export default class Level extends Component {
         this.state = {
             board: grid,
             deathByes: [],
+            startTime: new Date().getTime()
         }
     }
 
@@ -46,7 +47,9 @@ export default class Level extends Component {
         this.props.inputHandler.on('up', () => this.board.availableForMoves() && this.board.availableForMoves() && this.board.move(-1, 0));
         this.props.inputHandler.on('down', () => this.board.availableForMoves() && this.board.move(1, 0));
         this.props.inputHandler.on('restart', () => this.board.availableForMoves() && this.board.restart());
-        this.props.inputHandler.on('win', () => this.board.availableForMoves() && this.win());
+        this.props.inputHandler.on('win', () => this.board.availableForMoves() && this.win({
+            isSkip: 1
+        }));
         this.props.inputHandler.on('ai', () => this.board.aiSimple());
     }
 
@@ -64,8 +67,19 @@ export default class Level extends Component {
     }
 
 
-    win() {
-        this.props.announceVictory();
+    win(props={}) {
+        props = Object.assign({
+            isSkip: 0,
+            didCheat: 0
+        }, props);
+        this.props.announceVictory({
+            gameId: this.board.getInitialHash(),
+            isSkip: props.isSkip,
+            startTime: this.state.startTime,
+            didCheat: props.didCheat,
+            runTime: (new Date().getTime() - this.state.startTime)/1000
+
+        });
     }
 
     componentWillUnmount() {
