@@ -25,6 +25,8 @@ export class Board {
             deathByes: deathByes || []
         };
 
+        this.totalMoves = 0;
+
         this.onchange = onchange;
         this.onwin = onwin;
 
@@ -113,7 +115,8 @@ export class Board {
         if (this.onwin) {
             console.log("You finished! ", "Did you cheat? (I really hope not!)", this, this.didCheat);
             this.onwin({
-                didCheat: this.didCheat
+                didCheat: this.didCheat,
+                totalMoves: this.totalMoves
             })
         }
     }
@@ -214,6 +217,8 @@ export class Board {
                 deathByes: deathByes
             }, {})
         }
+
+        this.totalMoves++;
 
         this.setState({
             board: newBoard,

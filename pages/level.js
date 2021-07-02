@@ -70,15 +70,16 @@ export default class Level extends Component {
     win(props={}) {
         props = Object.assign({
             isSkip: 0,
-            didCheat: 0
+            didCheat: 0,
+            totalMoves: -1
         }, props);
         this.props.announceVictory({
             gameId: this.board.getInitialHash(),
             isSkip: props.isSkip,
             startTime: this.state.startTime,
             didCheat: props.didCheat,
-            runTime: (new Date().getTime() - this.state.startTime)/1000
-
+            runTime: (new Date().getTime() - this.state.startTime)/1000,
+            totalMoves: props.totalMoves
         });
     }
 
