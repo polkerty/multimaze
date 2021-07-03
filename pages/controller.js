@@ -197,14 +197,18 @@ export default class Controller extends Component {
 
     onCurrentLevelWin(props) {
         // Save
-        fetch('/api/save', {
-            method: 'POST',
-            body: JSON.stringify({
-                ...props,
-                groupNumber: this.state.currentGroup,
-                levelNumber: this.state.currentLevel,
+        if (!(
+            props.totalMoves === -1 // No reason to save completely empty games
+        )) {
+            fetch('/api/save', {
+                method: 'POST',
+                body: JSON.stringify({
+                    ...props,
+                    groupNumber: this.state.currentGroup,
+                    levelNumber: this.state.currentLevel,
+                })
             })
-        })
+        }
 
         const levelShift = props.retreat ? -1 : 1;
 

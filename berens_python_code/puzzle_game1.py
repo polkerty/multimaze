@@ -299,7 +299,7 @@ class Level():
                     if tele in self.board[i][j]:
                         locations += [[i,j]]
             if len(locations) == 0:
-                return
+                continue
             if len(locations) != 2:
                 raise Exception
             for item in [PLAYER1, PLAYER2]:

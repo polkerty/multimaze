@@ -239,7 +239,7 @@ export class Board {
 
     undo() {
         if ( !this.stack.length ) return;
-        this.didUndo = true;
+        this.didUndo = 1;
         this.setState(this.stack.pop());
     }
 
