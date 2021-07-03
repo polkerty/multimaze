@@ -10,7 +10,9 @@ export const TOKEN = {
     DEATH: 4,
     COLLAPSE: 5,
     BARRIER: 6,
-    COIN: 7
+    COIN: 7,
+    PLAYER2: 8,
+    REVERSER: 9
 }
 
 const CODE_TO_TOKEN = Object.fromEntries(Object.entries(TOKEN).map(([a, b]) => [b, a]));
@@ -28,17 +30,33 @@ export default class Level extends Component {
         this.board = new Board({grid}, {
             onchange: () => this.onchange(),
             onwin: (props) => this.win(props),
-            onundo: () => this.onundo()
+            onundo: () => this.onundo(),
+            onrestart: (props) => this.onrestart(props)
         });
         this.state = {
             board: grid,
             deathByes: [],
-            startTime: new Date().getTime()
+            startTime: new Date().getTime(),
+            deadAnimation: false
         }
     }
 
     onchange() {
         this.setState(this.board.state);
+    }
+
+    onrestart(props={}) {
+        if (props.didDie) {
+
+            console.log("It's been such a wonderful friendship... some things will never die.")
+            // Time for an animation
+            this.setState({
+                deadAnimation: true
+            })
+            setTimeout(() => this.setState({
+                deadAnimation: false
+            }), 800)
+        }
     }
 
     componentDidMount() {
@@ -64,6 +82,7 @@ export default class Level extends Component {
     render() {
 
         return (<>
+            {this.state.deadAnimation ? <div className={"dead-animation"}/> : ''}
             <div className={"level-grid"}>
                 {
                     this.state.board.map((row, index) => (<div key={index} className={"level-row"}>
