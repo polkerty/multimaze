@@ -14,7 +14,6 @@ function makeAnalyticsScript(id) {
               gtag('config', '${id}', { page_path: window.location.pathname });`
 }
 
-const gaId = typeof window !== 'undefined' && window.location.toString().includes('hardestmaze') ? 'G-CFQ4R8LWFE' : 'G-04HWXDQBVN';
 
 export default function Home() {
 
@@ -24,17 +23,16 @@ export default function Home() {
                 <title>Multimaze by Beren Gunsolus</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="icon" href="/favicon.ico"/>
-
-                <script
-                    async
-                    src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-                />
-
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: makeAnalyticsScript(gaId),
-                    }}
-                />
+                <script dangerouslySetInnerHTML={{
+                    __html: `
+                        const gaId = typeof window !== 'undefined' && window.location.toString().includes('hardestmaze') ? 'G-CFQ4R8LWFE' : 'G-04HWXDQBVN';
+                        document.write(\`<script async src="https://www.googletagmanager.com/gtag/js?id=\${gaId}"></script>\`);
+                        document.write(\`<script>window.dataLayer = window.dataLayer || [];
+                          function gtag(){dataLayer.push(arguments);}
+                          gtag('js', new Date());
+                          gtag('config', '\${gaId}', { page_path: window.location.pathname });</script>\`);
+                    `
+                }} />
 
                 <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"/>
 
