@@ -36,7 +36,7 @@ COIN_COLOR = YELLOW
 PLAYER2_COLOR = (128, 0, 128)
 PLAYER_BOTH = (107, 52, 235)
 PILL_COLOR = (235, 52, 220)
-TELEPORTER_COLORS = 20*[RED, ORANGE, YELLOW, GREEN, BLUE, PLAYER2_COLOR]
+TELEPORTER_COLORS = 20*[(175, 5, 237), (0, 247, 136), (230, 61, 5),(72, 221, 232), (196, 104, 12)]
 
 #KEY FOR INTERPRETING ARRAY
 WALL = 1
@@ -304,13 +304,12 @@ class Level():
                 raise Exception
             for item in [PLAYER1, PLAYER2]:
                 if item in self.board[locations[0][0]][locations[0][1]]:
-                    print("HERE WE GO")
                     self.board[locations[0][0]][locations[0][1]].remove(item)
-                    self.board[locations[1][0]][locations[1][1]].append(item)
-                elif item in self.board[locations[1][0]][locations[1][1]]:
-                    print("HERE WE GO")
+                    self.board[locations[1][0]][locations[1][1]].append((-1)*item)
+                if item in self.board[locations[1][0]][locations[1][1]]:
                     self.board[locations[1][0]][locations[1][1]].remove(item)
-                    self.board[locations[0][0]][locations[0][1]].append(item)
+                    self.board[locations[0][0]][locations[0][1]].append((-1)*item)
+            self.make_positive()
 
 def drawGrid(screen, board):
     for row in range(len(board)):
@@ -351,17 +350,18 @@ def drawGrid(screen, board):
                 pygame.draw.rect(screen, COIN_COLOR, r)
             if PILL in board[row][col]:
                 r = pygame.Rect((col*GRID_SIZE+10, row*GRID_SIZE+10), (GRID_SIZE-20, GRID_SIZE-20))
-                pygame.draw.rect(screen, COLOR, r)
+                pygame.draw.rect(screen, PILL_COLOR, r)
             for i in range(100, 200):
                 if i in board[row][col]:
                     COLOR = TELEPORTER_COLORS[i-100]
-                    r1 = pygame.Rect((col*GRID_SIZE, row*GRID_SIZE), (GRID_SIZE, 10))
+                    outline = 20
+                    r1 = pygame.Rect((col*GRID_SIZE, row*GRID_SIZE), (GRID_SIZE, outline))
                     pygame.draw.rect(screen, COLOR, r1)
-                    r2 = pygame.Rect((col*GRID_SIZE, row*GRID_SIZE), (10, GRID_SIZE))
+                    r2 = pygame.Rect((col*GRID_SIZE, row*GRID_SIZE), (outline, GRID_SIZE))
                     pygame.draw.rect(screen, COLOR, r2)
-                    r3 = pygame.Rect(((col+1)*GRID_SIZE-10, row*GRID_SIZE), (10, GRID_SIZE))
+                    r3 = pygame.Rect(((col+1)*GRID_SIZE-outline, row*GRID_SIZE), (outline, GRID_SIZE))
                     pygame.draw.rect(screen, COLOR, r3)
-                    r4 = pygame.Rect((col*GRID_SIZE, (row+1)*GRID_SIZE-10), (GRID_SIZE, 10))
+                    r4 = pygame.Rect((col*GRID_SIZE, (row+1)*GRID_SIZE-outline), (GRID_SIZE, outline))
                     pygame.draw.rect(screen, COLOR, r4)
 
 def level_editor(num_rows = DEFAULT_NUM_ROWS, num_cols = DEFAULT_NUM_COLS, level_input = []):
@@ -404,17 +404,17 @@ def level_editor(num_rows = DEFAULT_NUM_ROWS, num_cols = DEFAULT_NUM_COLS, level
             if event.type == pygame.KEYDOWN and event.key == pygame.K_s:
                 current_placement = PILL
             #Teleporters
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
-                current_placement = 100
             if event.type == pygame.KEYDOWN and event.key == pygame.K_1:
-                current_placement = 101
+                current_placement = 100
             if event.type == pygame.KEYDOWN and event.key == pygame.K_2:
-                current_placement = 102
+                current_placement = 101
             if event.type == pygame.KEYDOWN and event.key == pygame.K_3:
-                current_placement = 103
+                current_placement = 102
             if event.type == pygame.KEYDOWN and event.key == pygame.K_4:
-                current_placement = 104
+                current_placement = 103
             if event.type == pygame.KEYDOWN and event.key == pygame.K_5:
+                current_placement = 104
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_6:
                 current_placement = 105
             #printing
             if event.type == pygame.KEYDOWN and event.key == pygame.K_a:
