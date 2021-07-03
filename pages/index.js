@@ -25,7 +25,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico"/>
                 <script dangerouslySetInnerHTML={{
                     __html: `
-                        const gaId = typeof window !== 'undefined' && window.location.toString().includes('hardestmaze') ? 'G-CFQ4R8LWFE' : 'G-04HWXDQBVN';
+                        const gaId = typeof window !== 'undefined' && window.location.toString().includes('hardestmaze') ? 'G-EJCYRCMWMV' : 'G-04HWXDQBVN';
                         document.write(\`\${"<scr"}ipt async src="https://www.googletagmanager.com/gtag/js?id=\${gaId}">\${"</scr"}ipt>\`);
                         document.write(\`\${"<scr"}ipt>window.dataLayer = window.dataLayer || [];
                           function gtag(){dataLayer.push(arguments);}
