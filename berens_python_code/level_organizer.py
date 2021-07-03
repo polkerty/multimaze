@@ -83,7 +83,7 @@ random_bunch = eval(data)
 #development
 with open('random_multimaze_collection_3.txt', 'r') as file:
     data2 = file.read().replace('\n', '')
-random_flip_bunch = eval(data)
+random_flip_bunch = eval(data2)
 
 random_levels = []
 par = [39, 47, 33, 31, 48, 40, 36, 34, 34, 35, 51, 39, 31, 33, 32, 33, 34, 31, 33, 37, 36, 32, 37, 46, 24, 24, 22, 25, 23, 25, 24, 24, 29, 22, 30, 22, 27, 23, 28, 24, 22, 27, 25, 23, 23, 23, 25, 23, 29, 64, 82, 68, 74, 101, 42, 44, 60, 43, 53, 56, 72, 59, 69, 63, 53, 59, 43, 26, 22, 27, 23, 27, 28, 22, 25, 22, 31, 25, 22, 28, 30, 34, 25, 26, 27, 22, 27, 22, 27, 25, 31, 24, 23, 35, 35]
@@ -101,7 +101,7 @@ tutorial_levels = [l_tut1, l_tut2, l_tut3, l_tutfinishes, l_tut4, l_tut5, l_tuto
 easy_levels = [l_figureeight, l_maze_pair, l_boulders1, l_backforth, l_easyorange, l_ok, l_orangeline, l_oneway]
 medium_levels = [l_tacking, l_constrained, l_climb, l_easymerge, l_tutfinale, l_backtrack, l_merge, l_asym]
 hard_levels = [l_climb2, l_satisfying, l_boulders2, l_satisfying2, l_thin_ice, l_satisfying3, l_mediocre, l_rip]
-experimental_levels = [l_exp1, l_exp2, l_thin, l_thin2]
+experimental_levels = [l_exp1, l_exp2, l_thin, l_thin2] + [l_zagswitch, l_helpkey, l_swapmaze]
 developing_levels = [l_zagswitch, l_helpkey, l_swapmaze] + random_flip_levels
 curated_levels = [l_hardgood, l_glorious]
 all_levels = tutorial_levels + easy_levels + medium_levels + hard_levels + experimental_levels + curated_levels + random_levels
