@@ -449,14 +449,18 @@ footer a {
     border: 1px solid #eeeeee;
     border-radius: 3px;
     padding: 5px;
-    background: lightskyblue ;
+    background: lightskyblue;
 }
 
 /* Death animation */
 
 @keyframes funeral {
-    from {background-color: red;}
-    to {background-color: transparent}
+    from {
+        background-color: red;
+    }
+    to {
+        background-color: transparent
+    }
 }
 
 .dead-animation {
@@ -470,4 +474,110 @@ footer a {
     animation-duration: 1000ms;
     z-index: 10;
 
+}
+
+/* Celebrate */
+@keyframes victory {
+    from {
+        background-color: #28a74588;
+        width: 100%;
+        height: 100%;
+        transform: rotate(360deg);
+        opacity: 1;
+        display: none;
+
+    }
+    to {
+        background-color: transparent;
+        width: 0;
+        height: 0;
+        transform: rotate(0deg);
+        border-radius: 50%;
+        opacity: 0;
+        left: 50%;
+        top: 50%;
+    }
+}
+
+.victory-animation {
+    background-color: transparent;
+    width: 0;
+    height: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    animation-name: victory;
+    animation-duration: 1000ms;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    animation-timing-function: ease-out;
+
+}
+
+.celebrate-wrap {
+    position: relative;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.celebrate-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.celebrate-button {
+    max-width: 250px;
+    padding: 10px;
+    font-size: 20px;
+    background: var(--color);
+    background: -webkit-linear-gradient(bottom, var(--color), var(--offset));
+    background: -webkit-gradient(linear, left bottom, left top, from(var(--color)), to(var(--offset)));
+    background: linear-gradient(to top, var(--color), var(--offset));
+    border-radius: 10px;
+    color: #fafafa;
+    cursor: pointer;
+    -webkit-box-shadow: 3px 3px 3px var(--color);
+    box-shadow: 3px 3px 3px var(--color);
+    border: 2px solid var(--color);
+    margin-bottom: 10px;
+}
+
+.celebrate-button--next {
+    --color: #28a745;
+    --offset: #58c765;
+    margin-right: 10px;
+    flex-grow: 1;
+}
+
+.celebrate-button--replay {
+    --color: #eee;
+    --offset: white;
+    color: #888888;
+    width: 50px;
+
+
+
+}
+
+.celebrate-button:hover {
+    box-shadow: 0 0 0 transparent;
+    background: var(--color);
+}
+
+.celebrate-button:focus {
+    background: var(--offset);
+    box-shadow: 3px 3px 3px var(--color) inset;
+}
+
+.celebrate-header h1 {
+    font-weight: 200;
+    text-align: center;
+}
+
+.celebrate-header h2 {
+    text-align: center;
+    font-weight: 100;
 }

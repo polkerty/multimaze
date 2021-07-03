@@ -6,6 +6,7 @@ import Help from './help'
 import Level from './level'
 import Leaderboard from "./leaderboard";
 import {Board} from "../utils/logic";
+import Celebrate from "../utils/celebrate";
 
 class InputHandler {
     constructor() {
@@ -211,11 +212,28 @@ export default class Controller extends Component {
                     levelNumber: this.state.currentLevel,
                 })
             })
+        } else {
         }
 
+        if (!(props.didCheat || props.isSkip)) {
+            this.setState({
+                celebrate: true,
+                lastGameResults: props
+            })
+        } else {
+            this.nextOne(props);
+        }
+    }
+
+    nextOne(props) {
         const levelShift = props.retreat ? -1 : 1;
 
         this.updateGroupAndLevel(this.state.currentGroup, (this.state.currentLevel + levelShift + this.state.levels.length) % this.state.levels.length)
+
+    }
+
+    replay() {
+        this.updateGroupAndLevel(this.state.currentGroup, this.state.currentLevel);
     }
 
     setGroup(groupNumber) {
@@ -229,6 +247,8 @@ export default class Controller extends Component {
         let levels = defaultLevels.filter(x => x.groups.includes(group));
 
         this.setState({
+            celebrate: false, // ALWAYS clear it out
+            lastGameResults: null, // Just to avoid any weirdness
             levels: levels,
             currentGroup: group,
             currentLevel: level,
@@ -281,11 +301,17 @@ export default class Controller extends Component {
                     : <a className={"game-tab"} onClick={() => this.setTab('game')
                     } href={'#'}>Play</a>}
             </h1>
-            {level.description.length ? <p style={{textAlign: 'center'}}>{level.description}</p> : ''}
+            {level.description.length && this.state.tab === 'game' && !this.state.celebrate ?
+                <p style={{textAlign: 'center'}}>{level.description}</p> : ''}
 
             {this.state.tab === 'game'
-                ? <Level key={this.state.gameCount} levelId={level.id} name={level.name} definition={level.definition}
-                         inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>
+                ? this.state.celebrate
+                    ? <Celebrate gameId={this.getCurrentGameId()} key={this.state.gameCount}
+                                 results={this.state.lastGameResults} nextLevel={this.nextOne.bind(this)}
+                                 replayLevel={this.replay.bind(this)}/>
+                    : <Level key={this.state.gameCount} levelId={level.id} name={level.name}
+                             definition={level.definition}
+                             inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>
                 : <Leaderboard levelId={level.id} key={this.state.gameCount} gameId={this.getCurrentGameId()}/>
 
             }

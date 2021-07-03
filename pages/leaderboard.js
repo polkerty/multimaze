@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {toHHMMSS} from "../utils/utils";
 
 export default class Leaderboard extends Component {
     constructor(props) {
@@ -18,7 +19,8 @@ export default class Leaderboard extends Component {
             method: 'POST',
             body: JSON.stringify({
                 gameId: this.props.gameId,
-                timeSince: this.state.since
+                timeSince: this.state.since,
+                use: this.props.use || null
             })
         })
             .then(x => x.json())
@@ -35,20 +37,6 @@ export default class Leaderboard extends Component {
         })
     }
 
-    // https://stackoverflow.com/questions/1322732/convert-seconds-to-hh-mm-ss-with-javascript
-    toHHMMSS = (secs) => {
-        let sec_num = parseInt(secs, 10)
-        let hours = Math.floor(sec_num / 3600)
-        let minutes = Math.floor(sec_num / 60) % 60
-        let seconds = sec_num % 60
-
-        return [hours, minutes, seconds]
-            .map(v => v < 10 ? "0" + v : v)
-            .filter((v, i) => v !== "00" || i > 0)
-            .join(":")
-    }
-
-
     render() {
         if (this.state.error) {
             return 'There was an error loading the leaderboard.'
@@ -61,8 +49,8 @@ export default class Leaderboard extends Component {
                 return <div className={"leaderboard-entry " + (isYou ? 'leaderboard-entry--me' : '')}>
                     <span className={"leaderboard-position"}>#{place + 1}</span>
                     <span
-                        className={"leaderboard-name " + (isYou ? 'leaderboard-name--me' : '')}>{isYou ? 'Me' : 'Anonymous'}</span>
-                    <span className={"leaderboard-time"}>{this.toHHMMSS(time)}</span>
+                        className={"leaderboard-name " + (isYou ? 'leaderboard-name--me' : '')}>{isYou ? 'My best time' : 'Anonymous'}</span>
+                    <span className={"leaderboard-time"}>{toHHMMSS(time)}</span>
                 </div>
             })}
         </div>
