@@ -26,11 +26,11 @@ export default function Home() {
                 <script dangerouslySetInnerHTML={{
                     __html: `
                         const gaId = typeof window !== 'undefined' && window.location.toString().includes('hardestmaze') ? 'G-CFQ4R8LWFE' : 'G-04HWXDQBVN';
-                        document.write(\`<script async src="https://www.googletagmanager.com/gtag/js?id=\${gaId}"></script>\`);
-                        document.write(\`<script>window.dataLayer = window.dataLayer || [];
+                        document.write(\`\${"<scr"}ipt async src="https://www.googletagmanager.com/gtag/js?id=\${gaId}">\${"</scr"}ipt>\`);
+                        document.write(\`\${"<scr"}ipt>window.dataLayer = window.dataLayer || [];
                           function gtag(){dataLayer.push(arguments);}
                           gtag('js', new Date());
-                          gtag('config', '\${gaId}', { page_path: window.location.pathname });</script>\`);
+                          gtag('config', '\${gaId}', { page_path: window.location.pathname });\${"</scr"}ipt>\`);
                     `
                 }} />
 
