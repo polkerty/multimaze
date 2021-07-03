@@ -450,3 +450,23 @@ footer a {
     padding: 5px;
     background: lightskyblue ;
 }
+
+/* Death animation */
+
+@keyframes funeral {
+    from {background-color: red;}
+    to {background-color: transparent}
+}
+
+.dead-animation {
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    animation-name: funeral;
+    animation-duration: 1000ms;
+    z-index: 10;
+
+}

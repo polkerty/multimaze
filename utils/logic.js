@@ -41,6 +41,7 @@ export class Board {
 
         this.onchange = options.onchange;
         this.onwin = options.onwin;
+        this.onrestart = options.onrestart;
 
         this.aiLoop = 0;
 
@@ -314,7 +315,9 @@ export class Board {
             deathByes: deathByes
         })
 
-        if (this.isDead()) return this.restart();
+        if (this.isDead()) return this.restart({
+            didDie: true
+        });
 
         if (this.hasWon()) {
             this.win();
@@ -410,11 +413,14 @@ export class Board {
         return coinCountZero && onWinSquares;
     }
 
-    restart() {
+    restart(props) {
         this.setState({
             board: softDeepCopy(this.definition || []),
             deathByes: [],
         })
+        if (this.onrestart) {
+            this.onrestart(props);
+        }
     }
 
 }
