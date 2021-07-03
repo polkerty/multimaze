@@ -10,7 +10,9 @@ export const TOKEN = {
     DEATH: 4,
     COLLAPSE: 5,
     BARRIER: 6,
-    COIN: 7
+    COIN: 7,
+    PLAYER2: 8,
+    REVERSER: 9
 }
 
 const CODE_TO_TOKEN = Object.fromEntries(Object.entries(TOKEN).map(([a, b]) => [b, a]));
