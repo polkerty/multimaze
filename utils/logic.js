@@ -306,14 +306,21 @@ export class Board {
             })
         }
 
-        this.totalMoves++;
-
-        this.stack.push(softDeepCopy(this.state));
-
-        this.setState({
+        this.applyState({
             board: newBoard,
             deathByes: deathByes
         })
+
+    }
+
+    applyState(state) {
+        /**
+         * A wrapper for setState, but with more book keeping
+         */
+        this.totalMoves++;
+        this.stack.push(softDeepCopy(this.state));
+
+        this.setState(state)
 
         if (this.isDead()) return this.restart({
             didDie: true
@@ -322,6 +329,8 @@ export class Board {
         if (this.hasWon()) {
             this.win();
         }
+
+
     }
 
     undo() {
@@ -404,6 +413,24 @@ export class Board {
             }
         }
         return false;
+    }
+
+    swap() {
+        const newBoard = this.state.board.map(row =>
+            row.map(cell => {
+                    let newCell = [];
+                    for (const c of cell) {
+                        if (c === TOKEN.PLAYER1) newCell.push(TOKEN.PLAYER2);
+                        else if (c === TOKEN.PLAYER2) newCell.push(TOKEN.PLAYER1);
+                        else newCell.push(c);
+                    }
+                    return newCell;
+                }
+            )
+        )
+        this.applyState({
+            board: newBoard
+        })
     }
 
     hasWon() {
