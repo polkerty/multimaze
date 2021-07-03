@@ -36,7 +36,7 @@ COIN_COLOR = YELLOW
 PLAYER2_COLOR = (128, 0, 128)
 PLAYER_BOTH = (107, 52, 235)
 PILL_COLOR = (235, 52, 220)
-TELEPORTER_COLORS = 20*[(175, 5, 237), (0, 247, 136), (230, 61, 5),(72, 221, 232), (196, 104, 12)]
+TELEPORTER_COLORS = 20*[(175, 5, 237), (0, 247, 136), (230, 61, 5),(72, 221, 232), (196, 104, 12),DEATH_COLOR,PLAYER_COLOR,PLAYER_BOTH,ORANGE,GREEN]
 
 #KEY FOR INTERPRETING ARRAY
 WALL = 1
@@ -416,6 +416,14 @@ def level_editor(num_rows = DEFAULT_NUM_ROWS, num_cols = DEFAULT_NUM_COLS, level
                 current_placement = 104
             if event.type == pygame.KEYDOWN and event.key == pygame.K_6:
                 current_placement = 105
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_7:
+                current_placement = 106
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_8:
+                current_placement = 107
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_9:
+                current_placement = 108
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
+                current_placement = 109
             #printing
             if event.type == pygame.KEYDOWN and event.key == pygame.K_a:
                 remove_duplicates(board)
