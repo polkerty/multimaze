@@ -63,6 +63,7 @@ export default class Level extends Component {
         this.board.restart();
 
         this.props.inputHandler.clearAll();
+        this.props.inputHandler.on('swap', () => this.board.availableForMoves() && this.board.swap());
         this.props.inputHandler.on('left', () => this.board.availableForMoves() && this.board.move(0, -1));
         this.props.inputHandler.on('right', () => this.board.availableForMoves() && this.board.move(0, 1));
         this.props.inputHandler.on('up', () => this.board.availableForMoves() && this.board.availableForMoves() && this.board.move(-1, 0));

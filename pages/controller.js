@@ -16,6 +16,9 @@ class InputHandler {
         const self = this;
         window.addEventListener('keydown', function (e) {
             switch (e.key) {
+                case 'f':
+                    self.emit('swap')
+                    break;
                 case 'ArrowLeft':
                 case 'a':
                     self.emit('left');
