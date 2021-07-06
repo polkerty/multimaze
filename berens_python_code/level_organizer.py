@@ -101,7 +101,7 @@ tutorial_levels = [l_tut1, l_tut2, l_tut3, l_tutfinishes, l_tut4, l_tut5, l_tuto
 easy_levels = [l_figureeight, l_maze_pair, l_boulders1, l_backforth, l_easyorange, l_ok, l_orangeline, l_oneway]
 medium_levels = [l_tacking, l_constrained, l_climb, l_easymerge, l_tutfinale, l_backtrack, l_merge, l_asym]
 hard_levels = [l_climb2, l_satisfying, l_boulders2, l_satisfying2, l_thin_ice, l_satisfying3, l_mediocre, l_rip]
-experimental_levels = [l_exp1, l_exp2, l_thin, l_thin2] + [l_zagswitch, l_helpkey, l_swapmaze] + random_flip_levels
+experimental_levels = [l_exp1, l_exp2, l_thin, l_thin2] + [l_zagswitch, l_helpkey, l_swapmaze] + [l_cubic, l_number, l_clever]
 developing_levels = [l_zagswitch, l_helpkey, l_swapmaze] + random_flip_levels
 curated_levels = [l_hardgood, l_glorious]
 all_levels = tutorial_levels + easy_levels + medium_levels + hard_levels + experimental_levels + curated_levels + random_levels
@@ -117,6 +117,6 @@ set_difficulty(random_levels, RANDOM)
 set_difficulty(curated_levels, CURATED)
 #set_difficulty(developing_levels, DEVELOPING)
 
-make_json(all_levels)
+#make_json(all_levels)
 
         

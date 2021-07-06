@@ -2,4 +2,4 @@ from puzzle_game1 import *
 from more_levels import *
 from level_organizer import *
 
-level_editor(8,14, l_number)
+level_editor(8,11)
