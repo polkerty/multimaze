@@ -169,7 +169,7 @@ export default class Controller extends Component {
 
         this.inputHandler = new InputHandler();
 
-        const initialGroup = 5, initialLevel = 0;
+        const initialGroup = 1, initialLevel = 0;
 
         this.state = {
             levels: defaultLevels.filter(x => x.groups.includes(initialGroup)),
