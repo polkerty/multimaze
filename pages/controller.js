@@ -189,7 +189,7 @@ export default class Controller extends Component {
 
     componentDidMount() {
         if (typeof window !== 'undefined') {
-            const initialGroup = typeof localStorage !== 'undefined' && localStorage.mmGroup ? parseInt(localStorage.mmGroup) : 1;
+            const initialGroup = typeof localStorage !== 'undefined' && localStorage.mmGroup ? parseInt(localStorage.mmGroup) : 0;
             const initialLevel = typeof localStorage !== 'undefined' && localStorage.mmLevel ? parseInt(localStorage.mmLevel) : 0;
             this.updateGroupAndLevel(initialGroup, initialLevel)
         }
