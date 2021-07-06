@@ -224,11 +224,13 @@ a {
 }
 
 .maze-controls__group:nth-child(7n + 2) {
-    background: #dc3545;
+    background: #ffc107;
+
 }
 
 .maze-controls__group:nth-child(7n + 3) {
     background: #fd7e14;
+
 }
 
 .maze-controls__group:nth-child(7n + 4) {
