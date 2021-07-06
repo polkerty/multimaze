@@ -517,7 +517,7 @@ def print_level(level):
     return result
 
 def make_json(levels):
-    result = ("{\n  \"groups\": [\"All\", \"Easy\", \"Medium\", \"Hard\", \"Classic\", \"Tutorial\",\"Experimental\", \"Random\", \"Curated\"],\n\"puzzles\": [")
+    result = ("{\n  \"groups\": [\"Tutorial\", \"Easy\", \"Medium\", \"Hard\", \"Classic\",\"Experimental\", \"Random\", \"Curated\"],\n\"puzzles\": [")
     for i in levels:
         result += "\n   "
         result += print_level(i)

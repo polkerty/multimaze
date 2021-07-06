@@ -62,15 +62,14 @@ Development:
 l_zagswitch
 """
 
-ALL = 0
+TUTORIAL = 0
 EASY = 1
 MEDIUM = 2
 HARD = 3
 CLASSIC = 4
-TUTORIAL = 5
-EXPERIMENTAL = 6
-RANDOM = 7
-CURATED = 8
+EXPERIMENTAL = 5
+RANDOM = 6
+CURATED = 7
 def set_difficulty(arr, difficulty):
     for i in arr:
         i.set_group([difficulty])
