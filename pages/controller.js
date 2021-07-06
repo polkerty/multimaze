@@ -241,6 +241,13 @@ export default class Controller extends Component {
     }
 
     updateGroupAndLevel(group, level) {
+
+        // Is this valid? If not, fail silently.
+
+        let pool = defaultLevels.filter(x => x.groups.includes(group));
+        if ( !pool[level]) return false;
+
+
         localStorage.mmGroup = group;
         localStorage.mmLevel = level;
 
