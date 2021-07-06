@@ -96,8 +96,8 @@ random_flip_levels = []
 for i in range(len(random_flip_bunch)):
         random_flip_levels.append(Level(random_flip_bunch[i], "Time to fail"))
 
-tutorial_levels = [l_tut1, l_tut2, l_tut3, l_matching, l_tut4, l_tut5, l_tutorange, l_tutmerge, l_tut8, l_tut10, l_tut11]
-easy_levels = [l_uparound, l_easyorange, l_maze_pair, l_easymerge, l_boulders1, l_backforth, l_easyorange, l_figureeight, l_ok, l_orangeline,  l_easymerge2, l_oneway]
+tutorial_levels = [l_tut1, l_tut2, l_tut3, l_matching, l_tut4, l_tut5, l_easyorange, l_tutmerge, l_tut8, l_tut10, l_tut11]
+easy_levels = [l_uparound,  l_tutorange, l_easyorange, l_maze_pair, l_easymerge, l_boulders1, l_backforth, l_easyorange, l_figureeight, l_ok, l_orangeline,  l_easymerge2, l_oneway]
 medium_levels = [l_tacking, l_hamilton, l_constrained, l_climb, l_illusion, l_tutfinale, l_backtrack, l_merge, l_asym, l_caves]
 hard_levels = [l_climb2, l_satisfying, l_boulders2, l_satisfying2, l_thin_ice, l_satisfying3, l_mediocre, l_rip]
 experimental_levels = [l_exp1, l_exp2, l_thin, l_thin2] + [l_zagswitch, l_helpkey, l_swapmaze, l_bootstrapped1, l_sparse, l_sparse2] + [l_cubic, l_number, l_clever]
