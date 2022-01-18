@@ -142,7 +142,11 @@ export function Cell(props) {
         style.height = props.size + 'px';
     }
 
-    const cellBackground = props.def.find(code => code === TOKEN.WALL) ? 'fill--WALL ' : ' ';
+    const fullBodyCell = props.def.find(code => [TOKEN.WALL,
+        TOKEN.DEATH, TOKEN.PLAYER1, TOKEN.PLAYER2, TOKEN.FINISH1
+    ].includes(code));
+
+    const cellBackground = fullBodyCell ? 'fill--' + fullBodyCell + ' ' : ' ';
     return <div style={style}
                 className={cellBackground + 'level-cell' + (props.size ? ' level-cell--sized' : '')}>
         <div className={"level-cell__spacer"}/>
