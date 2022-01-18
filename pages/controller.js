@@ -319,7 +319,7 @@ export default class Controller extends Component {
                     : <><Level key={this.state.gameCount} levelId={level.id} name={level.name}
                                definition={level.definition}
                                inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>
-                        <Leaderboard show={false} levelId={level.id} key={'leaderboard-load'}
+                        <Leaderboard hide={true} levelId={level.id} key={'leaderboard-load'}
                                      gameId={this.getCurrentGameId()}/>
                     </>
                 : <Leaderboard levelId={level.id} key={this.state.gameCount} gameId={this.getCurrentGameId()}/>
