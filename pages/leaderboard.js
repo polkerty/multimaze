@@ -38,6 +38,8 @@ export default class Leaderboard extends Component {
     }
 
     render() {
+        if (!this.props.show) return <span/> // We sometimes include leaderboard as a hidden component to ensure serverless
+        // scoreboard functions will be warmed up when we *do* need the leaderboard
         if (this.state.error) {
             return 'There was an error loading the leaderboard.'
         }
@@ -54,7 +56,5 @@ export default class Leaderboard extends Component {
                 </div>
             })}
         </div>
-        return <pre>{JSON.stringify(this.state.leaders, null, 2)
-        }</pre>
     }
 }

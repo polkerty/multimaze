@@ -245,7 +245,7 @@ export default class Controller extends Component {
         // Is this valid? If not, fail silently.
 
         let pool = defaultLevels.filter(x => x.groups.includes(group));
-        if ( !pool[level]) return false;
+        if (!pool[level]) return false;
 
 
         localStorage.mmGroup = group;
@@ -316,9 +316,12 @@ export default class Controller extends Component {
                     ? <Celebrate gameId={this.getCurrentGameId()} key={this.state.gameCount}
                                  results={this.state.lastGameResults} nextLevel={this.nextOne.bind(this)}
                                  replayLevel={this.replay.bind(this)}/>
-                    : <Level key={this.state.gameCount} levelId={level.id} name={level.name}
-                             definition={level.definition}
-                             inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>
+                    : <><Level key={this.state.gameCount} levelId={level.id} name={level.name}
+                               definition={level.definition}
+                               inputHandler={this.inputHandler} announceVictory={this.onCurrentLevelWin.bind(this)}/>
+                        <Leaderboard show={false} levelId={level.id} key={'leaderboard-load'}
+                                     gameId={this.getCurrentGameId()}/>
+                    </>
                 : <Leaderboard levelId={level.id} key={this.state.gameCount} gameId={this.getCurrentGameId()}/>
 
             }
