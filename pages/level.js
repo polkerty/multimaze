@@ -45,7 +45,7 @@ export default class Level extends Component {
         this.setState(this.board.state);
     }
 
-    onrestart(props={}) {
+    onrestart(props = {}) {
         if (props.didDie) {
 
             console.log("It's been such a wonderful friendship... some things will never die.")
@@ -141,7 +141,10 @@ export function Cell(props) {
         style.width = props.size + 'px';
         style.height = props.size + 'px';
     }
-    return <div style={style} className={"level-cell" + (props.size ? ' level-cell--sized' : '')}>
+
+    const cellBackground = props.def.find(code => code === TOKEN.WALL) ? 'fill--WALL ' : ' ';
+    return <div style={style}
+                className={cellBackground + 'level-cell' + (props.size ? ' level-cell--sized' : '')}>
         <div className={"level-cell__spacer"}/>
         {
             props.def.map((code, index) => <div key={index}
