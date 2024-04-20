@@ -188,11 +188,17 @@ export default class Controller extends Component {
     }
 
     componentDidMount() {
-        if (typeof window !== 'undefined') {
-            const initialGroup = typeof localStorage !== 'undefined' && localStorage.mmGroup ? parseInt(localStorage.mmGroup) : 0;
-            const initialLevel = typeof localStorage !== 'undefined' && localStorage.mmLevel ? parseInt(localStorage.mmLevel) : 0;
-            this.updateGroupAndLevel(initialGroup, initialLevel)
+        if (typeof window === 'undefined') {
+            return;
         }
+        const queryParams = new URLSearchParams(window.location.search);
+        const queryGroup = queryParams.get('group') ? parseInt(queryParams.get('group')) : undefined;
+        const queryLevel = queryParams.get('level') ? parseInt(queryParams.get('level')) : undefined;
+        const locallyStoredGroup = typeof localStorage !== 'undefined' && localStorage.mmGroup ? parseInt(localStorage.mmGroup) : undefined;
+        const locallyStoredLevel = typeof localStorage !== 'undefined' && localStorage.mmLevel ? parseInt(localStorage.mmLevel) : undefined;
+        const initialLevel = queryLevel ?? locallyStoredLevel ?? 0;
+        const initialGroup = queryGroup ?? locallyStoredGroup ?? 0;
+        this.updateGroupAndLevel(initialGroup, initialLevel)
     }
 
     getCurrentLevel() {
