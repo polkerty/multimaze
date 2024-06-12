@@ -21,7 +21,7 @@ a {
 
 /* Our styles */
 
-.level-wrap {
+.level-wrap, .builder-wrap {
     width: calc(100vh - 250px);
     max-width: calc(100vw - 20px); /* Backwards compatibility */
     max-width: min(800px, calc(100vw - 20px));
@@ -61,6 +61,7 @@ a {
     position: relative;
     border-bottom: 1px solid black;
     border-right: 1px solid black;
+    background: white;
     /*border: 1px solid black;*/
 }
 
@@ -620,4 +621,55 @@ footer a {
 .celebrate-header h2 {
     text-align: center;
     font-weight: 100;
+}
+
+.builder {
+    display: flex;
+    
+}
+
+.builder__main-pane {
+    flex-grow: 1;
+}
+
+.builder__tools-pane {
+    width: 100px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    align-self: stretch;
+}
+
+.builder__tools__token-picker {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.builder__tools__token-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+.builder__tools__token-btn:hover {
+    background: #ccc;
+    box-shadow: 2px 2px 2px #888;
+}
+
+.builder__tools__token-btn:focus {
+    background: #888;
+    box-shadow: 2px 2px 2px #888 inset;
+}
+
+.builder__tools__token-btn--active {
+    background: #ccc;
+    border: 1px solid #888;
+    box-shadow: 2px 2px 2px #888;
+
+}
+
+.builder__tools__token-btn .level-cell {
+    border: 1px solid black;
 }
