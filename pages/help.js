@@ -1,4 +1,4 @@
-import {Cell, TOKEN} from "./level";
+import {Cell, TOKEN} from "../components/level";
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 

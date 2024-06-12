@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import Leaderboard from "../pages/leaderboard";
+import Leaderboard from "../components/leaderboard";
 import Board from './logic'
 import {toHHMMSS} from "./utils";
 import {faRedo} from '@fortawesome/free-solid-svg-icons'

@@ -1,4 +1,4 @@
-import {TOKEN} from "../pages/level";
+import {TOKEN} from "../components/level";
 import btoa from "btoa";
 
 function softDeepCopy(object) {

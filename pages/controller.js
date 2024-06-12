@@ -3,8 +3,8 @@ import React, {Component} from 'react';
 import {faQuestionCircle, faTrophy} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Help from './help'
-import Level from './level'
-import Leaderboard from "./leaderboard";
+import Level from '../components/level'
+import Leaderboard from "../components/leaderboard";
 import {Board} from "../utils/logic";
 import Celebrate from "../utils/celebrate";
 
@@ -155,7 +155,7 @@ class LevelConfig {
     }
 }
 
-const {puzzles, groups} = require('./levels.json');
+const {puzzles, groups} = require('../components/levels.json');
 const defaultLevels = puzzles.map(({
                                        name,
                                        definition,
