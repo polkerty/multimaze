@@ -17,6 +17,18 @@ class LevelConfig {
     }
 }
 
+function makeBlankDefinition(rows, cols) {
+    const definition = [];
+    for ( let i = 0; i < rows; ++i ) {
+        const row = [];
+        for ( let j  = 0; j < cols; ++j) {
+            row.push([]);
+        }
+        definition.push(row);
+    }
+    return definition;
+}
+
 const {puzzles, groups} = require('./levels.json');
 const defaultLevels = puzzles.map(({
                                        name,
@@ -31,9 +43,14 @@ export default class Builder extends Component {
 
         this.inputHandler = new InputHandler();
 
+        const defaultRows = 5, defaultCols = 5;
+
 
         this.state = {
             //TODO: allow loading levels/groups from lib
+            rows: defaultRows,
+            cols: defaultCols,
+            definition: makeBlankDefinition(defaultRows, defaultCols)
         }
 
     }
@@ -53,6 +70,8 @@ export default class Builder extends Component {
             </h1>
 
             { /* TODO: Allow entering level + description */ }
+
+            <Level definition={this.state.definition} inputHandler={this.inputHandler} />
         </div>)
     }
 

@@ -116,7 +116,7 @@ export default class Level extends Component {
             totalMoves: -1,
             didUndo: 0
         }, props);
-        this.props.announceVictory({
+        this.props.announceVictory?.({
             gameId: this.board.getInitialHash(),
             isSkip: props.isSkip,
             retreat: props.retreat,
