@@ -7,7 +7,9 @@ import { Board } from "../utils/logic";
 import Celebrate from "../utils/celebrate";
 import InputHandler from "../utils/inputHandler";
 import LevelConfig from '../utils/levelConfig';
+import solver from "../utils/workerManager";
 
+console.log(solver);
 function cloneDeep(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
@@ -82,6 +84,8 @@ export default class Builder extends Component {
 
     if ( this.state.activeToken === TOKEN.EMPTY) {
        // Clear cell
+    } else if ( cur.length === 1 && cur[0] === this.state.activeToken) {
+        // Clear cell
     } else if ( !cur.length ) {
         // Empty cell is filled with the active token 
         cell.push(this.state.activeToken);
