@@ -26,6 +26,9 @@ class Controller {
   }
 
   solve(definition) {
+    if ( Math.random() < 0.1 ) {
+        return { tooHard: true, moveCount: 1000 }
+    }
     if ( Math.random() < 0.3 ) {
         return { impossible: true, moveCount: -1 }
     }

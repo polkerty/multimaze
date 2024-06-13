@@ -689,3 +689,9 @@ footer a {
     color: red;
 
 }
+
+.builder__tools__analysis--hard {
+    border: 1px solid orange;
+    color: orange;
+
+}

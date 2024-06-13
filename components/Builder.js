@@ -178,6 +178,13 @@ export default class Builder extends Component {
 
 function Analysis(props) {
   const BASE_CLASS = "builder__tools__analysis";
+  if (props.tooHard) {
+    return (
+      <div className={BASE_CLASS + " " + (BASE_CLASS + "--hard")}>
+        At least {props.moveCount} moves
+      </div>
+    );
+  }
   if (props.impossible) {
     return (
       <div className={BASE_CLASS + " " + (BASE_CLASS + "--impossible")}>
