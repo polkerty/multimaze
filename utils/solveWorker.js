@@ -17,7 +17,7 @@ class Controller {
     let response;
     switch (payload.action) {
       case "solve":
-        response = this.solve(payload.definition);
+        response = this.solve(payload.definition, payload.deathByes);
         break;
       default:
         response = { error: "Action not recognized: " + payload.action };
@@ -25,8 +25,8 @@ class Controller {
     this.respond(response, messageId);
   }
 
-  solve(definition) {
-    const root = new Board({ grid: definition });
+  solve(definition, deathByes) {
+    const root = new Board({ grid: definition, deathByes });
     const solution = root.aiSimple();
 
     if (!solution) {

@@ -31,8 +31,8 @@ class SolveWorkerManager {
         return listener;
     }
 
-    async solve(definition) {
-        return this.message({ action: 'solve', definition })
+    async solve(definition, deathByes) {
+        return this.message({ action: 'solve', definition, deathByes })
     }
 }
 
