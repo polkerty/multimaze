@@ -88,6 +88,10 @@ export default class Builder extends Component {
     this.updateTokenAtPosition(props.row, props.col);
   }
 
+  changeHandler(props) {
+    this.updateAnalysis(props.board, props.deathByes);
+  }
+
   updateTokenAtPosition(row, col) {
     const cur = this.state.definition[row]?.[col]?.slice();
     const cell = [];
@@ -127,9 +131,14 @@ export default class Builder extends Component {
     // We would also like to analyze the position using our web worker.
     // But we need to disregard any previous analysis requests.
 
+    this.updateAnalysis(definition)
+  }
+
+  updateAnalysis(definition, deathByes) {
     const pos = this.analysisRequests.length;
+    console.log("requesting solve of def: ", definition)
     this.analysisRequests.push(
-      window.solver.solve(definition).then((result) => {
+      window.solver.solve(definition, deathByes).then((result) => {
         console.log("Got result!", result);
         if (this.analysisRequests.length !== pos + 1) {
           // Another request has been made since we initiated this request; abort.
@@ -138,6 +147,7 @@ export default class Builder extends Component {
         this.setState({ analysis: result });
       })
     );
+
   }
 
   render() {
@@ -154,6 +164,7 @@ export default class Builder extends Component {
               inputHandler={this.inputHandler}
               key={this.state.version}
               onclick={this.clickHandler.bind(this)}
+              onchange={this.changeHandler.bind(this)}
             />
           </div>
           <div className="builder__tools-pane">

@@ -49,6 +49,9 @@ export default class Level extends Component {
 
   onchange() {
     this.setState(this.board.state);
+    if ( this.props.onchange ) {
+      this.props.onchange(this.board.state);
+    }
   }
 
   onclick(props) {
