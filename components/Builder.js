@@ -9,7 +9,8 @@ import InputHandler from "../utils/inputHandler";
 import LevelConfig from '../utils/levelConfig';
 import solver from "../utils/workerManager";
 
-console.log(solver);
+if (typeof window !== 'undefined')  window.solver = solver;
+
 function cloneDeep(obj) {
     return JSON.parse(JSON.stringify(obj));
 }

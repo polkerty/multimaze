@@ -1,1 +1,3 @@
-console.log("hello!");
+onmessage = e => {
+    postMessage(Math.random());
+}

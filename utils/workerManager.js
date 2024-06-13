@@ -1,8 +1,13 @@
+import SolveWorker from 'worker-loader!./solveWorker.js';
+
+
 class SolveWorkerManager {
     constructor() {
         if ( typeof window !== 'undefined' && window.Worker ) {
-            this.worker = new Worker('solveWorker.js');
-            this.worker.po
+            this.worker = new SolveWorker();
+            this.worker.onmessage = e => {
+                console.log("Message: ", e);
+            }
         }
     }
 }
