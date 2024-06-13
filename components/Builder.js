@@ -21,6 +21,7 @@ const LEGAL_TOKEN_PAIRS = [
   [TOKEN.FINISH1, TOKEN.COIN],
   [TOKEN.FINISH1, TOKEN.BARRIER],
   [TOKEN.FINISH1, TOKEN.PLAYER1],
+  [TOKEN.DEATH, TOKEN.BARRIER],
 ];
 
 function makeBlankDefinition(rows, cols) {
