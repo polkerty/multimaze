@@ -18,6 +18,9 @@ function cloneDeep(obj) {
 const LEGAL_TOKEN_PAIRS = [
   [TOKEN.COLLAPSE, TOKEN.COIN],
   [TOKEN.COLLAPSE, TOKEN.BARRIER],
+  [TOKEN.FINISH1, TOKEN.COIN],
+  [TOKEN.FINISH1, TOKEN.BARRIER],
+  [TOKEN.FINISH1, TOKEN.PLAYER1],
 ];
 
 function makeBlankDefinition(rows, cols) {

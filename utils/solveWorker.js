@@ -95,7 +95,7 @@ class Board {
 
   }
 
-  aiSimple(maxIter = 1000000) {
+  aiSimple(maxIter = 50000) {
 
     const startTime = new Date().getTime();
     console.log("Neighbors: ", this.getNeighbors());
@@ -138,9 +138,9 @@ class Board {
       }
     }
 
-    console.log(memo, Object.values(memo).length, best, best.target?.hasWon());
+    console.log(memo, Object.values(memo).length, best, "won?", best.target?.hasWon());
 
-    if (best.target) {
+    if (best.target?.hasWon()) {
       return best.path;
     } else {
       return null;
@@ -447,14 +447,24 @@ class Board {
     let coinCountZero = !this.state.board
       .flat()
       .some((x) => x.includes(TOKEN.COIN));
-    let onWinSquares = !this.state.board
-      .flat()
-      .some(
-        (x) =>
-          (x.includes(TOKEN.PLAYER1) || x.includes(TOKEN.PLAYER2)) &&
-          !x.includes(TOKEN.FINISH1)
-      );
-    return coinCountZero && onWinSquares;
+
+    let hasTarget = false;
+    let hasPlayer = false; 
+
+    for ( const row of this.state.board ) {
+      for ( const cell of row ) {
+        const cellHasPlayer = cell.includes(TOKEN.PLAYER1);
+        if ( cellHasPlayer ) {
+          if ( !cell.includes(TOKEN.FINISH1) ) return false;
+          hasPlayer = true; 
+        }
+        if ( cell.includes(TOKEN.FINISH1)) {
+          hasTarget = true;
+        }
+      }
+    }
+
+    return coinCountZero && hasPlayer && hasTarget;
   }
 
   restart(props) {
