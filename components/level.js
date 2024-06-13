@@ -52,8 +52,8 @@ export default class Level extends Component {
   }
 
   onclick(props) {
-    if (props.onclick) {
-      props.onclick(props);
+    if (this.props.onclick) {
+      this.props.onclick(props);
     }
   }
 

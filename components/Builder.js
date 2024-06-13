@@ -17,6 +17,12 @@ class LevelConfig {
   }
 }
 
+function cloneDeep(obj) {
+    return JSON.parse(JSON.stringify(obj));
+}
+
+const LEGAL_TOKEN_PAIRS = [[TOKEN.COLLAPSE, TOKEN.COIN], [TOKEN.COLLAPSE, TOKEN.BARRIER]];
+
 function makeBlankDefinition(rows, cols) {
   const definition = [];
   for (let i = 0; i < rows; ++i) {
@@ -59,6 +65,8 @@ export default class Builder extends Component {
       cols: defaultCols,
       definition: makeBlankDefinition(defaultRows, defaultCols),
       activeToken: TOKEN.WALL,
+      version: 0,
+      history: [],
     };
   }
 
@@ -70,8 +78,43 @@ export default class Builder extends Component {
   }
 
   clickHandler(props) {
-    console.log(props.row, props.col, props);
+    this.updateTokenAtPosition(props.row, props.col);
+    
   }
+
+  updateTokenAtPosition(row, col) {
+    const cur = this.state.definition[row]?.[col]?.slice();
+    const cell = [];
+    if ( !cell ) {
+        console.log("Out of bounds access: ", row, col);
+    }
+
+    if ( this.state.activeToken === TOKEN.EMPTY) {
+       // Clear cell
+    } else if ( !cur.length ) {
+        // Empty cell is filled with the active token 
+        cell.push(this.state.activeToken);
+    } else if ( cur.length === 1 && LEGAL_TOKEN_PAIRS.find(([a, b])=> a === cur[0] && b === this.state.activeToken) ) {
+        // Cell is not empty, but we can 'stack' the selected token on top of it.
+        cell.push(cur[0]);
+        cell.push(this.state.activeToken);
+    } else {
+        cell.push(this.state.activeToken);
+    }
+
+    const newDefinition = cloneDeep(this.state.definition);
+    newDefinition[row][col] = cell;
+    this.applyStateChange(newDefinition);
+
+
+  }
+
+  applyStateChange(definition ) {
+    this.state.history.push(this.state.definition);
+    this.setState({ definition, version: this.state.version + 1 })
+  }
+
+
 
   render() {
     return (
@@ -85,6 +128,7 @@ export default class Builder extends Component {
             <Level
               definition={this.state.definition}
               inputHandler={this.inputHandler}
+              key={this.state.version}
               onclick={this.clickHandler.bind(this)}
             />
           </div>

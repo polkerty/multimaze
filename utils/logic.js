@@ -294,8 +294,6 @@ export class Board {
                 if (!this.state.board[e[0]][e[1]].includes(TOKEN.FINISH1)) hasWon = false;
             }
 
-            // console.log("Cached player sqaures: ", cachedPlayerSquares, newPlayerSquares);
-
             return new Board({
                 grid: newBoard,
                 deathByes: deathByes
