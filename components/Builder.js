@@ -6,6 +6,7 @@ import Leaderboard from "./leaderboard";
 import { Board } from "../utils/logic";
 import Celebrate from "../utils/celebrate";
 import InputHandler from "../utils/inputHandler";
+import LevelConfig from '../utils/levelConfig';
 
 function cloneDeep(obj) {
     return JSON.parse(JSON.stringify(obj));
