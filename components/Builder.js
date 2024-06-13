@@ -35,8 +35,8 @@ export function TokenButton({ type, onClick, active }) {
   const BASE_CLASS = "builder__tools__token-btn";
   const ACTIVE = BASE_CLASS + "--active";
   return (
-    <div tabIndex={-1} className={BASE_CLASS + " " + (active ? ACTIVE : "")}>
-      <Cell def={type ? [type] : []} onClick={onClick} size={30} />
+    <div tabIndex={-1} onClick={onClick} className={BASE_CLASS + " " + (active ? ACTIVE : "")}>
+      <Cell def={type ? [type] : []} size={30} />
     </div>
   );
 }
