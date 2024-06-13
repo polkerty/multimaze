@@ -7,16 +7,6 @@ import { Board } from "../utils/logic";
 import Celebrate from "../utils/celebrate";
 import InputHandler from "../utils/inputHandler";
 
-class LevelConfig {
-  constructor(id, name, definition, groups, description) {
-    this.id = id;
-    this.name = name;
-    this.definition = definition;
-    this.groups = groups;
-    this.description = description || "";
-  }
-}
-
 function cloneDeep(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
