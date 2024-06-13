@@ -8,13 +8,11 @@ class SolveWorkerManager {
             this.worker.onmessage = e => {
                 const messageId = e.data.messageId;
                 if ( this.messageBuffer[messageId] ) {
-                    this.messageBuffer[messageId].resolve(e.data.payload);
-                } 
-            }
-            this.worker.onmessageerror = e => {
-                const messageId = e.data.messageId;
-                if ( this.messageBuffer[messageId] ) {
-                    
+                    if ( e.data.error ) {
+                        this.messageBuffer[messageId].reject(e.data.payload);
+                    } else {
+                        this.messageBuffer[messageId].resolve(e.data.payload);
+                    }
                 } 
             }
         }
@@ -25,15 +23,16 @@ class SolveWorkerManager {
     }
 
     async message(payload) {
-        payload.messageId = this.messageId++;
-        const listener = new Promise((res, rej) => {
-            this.messageBuffer[payload.messageId] = { res, rej}
+        const messageId = this.messageId++;
+        const listener = new Promise((resolve, reject) => {
+            this.messageBuffer[messageId] = { resolve, reject }
         })
         this.worker.postMessage({ payload, messageId });
+        return listener;
     }
 
     async solve(definition) {
-        await this.message({ action: 'solve', definition })
+        return this.message({ action: 'solve', definition })
     }
 }
 

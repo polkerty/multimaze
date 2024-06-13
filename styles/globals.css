@@ -673,3 +673,19 @@ footer a {
 .builder__tools__token-btn .level-cell {
     border: 1px solid black;
 }
+
+.builder__tools__analysis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    font-weight: bold;
+    font-size: larger;
+    text-align: center;
+}
+
+.builder__tools__analysis--impossible {
+    border: 1px solid red;
+    color: red;
+
+}
