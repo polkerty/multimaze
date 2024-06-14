@@ -634,6 +634,8 @@ footer a {
   border: 1px solid #eee;
   border-radius: 5px;
   align-self: stretch;
+  display: flex;
+  flex-direction:  column;
 }
 
 .builder__tools__token-picker {
@@ -804,6 +806,8 @@ footer a {
 
 .builder__tools__dims {
   display: flex;
+  font-size: 24px;
+  font-family: arial;
 }
 
 .builder__tools__dim {
@@ -813,4 +817,6 @@ footer a {
   padding: 0;
   text-align: center;
   flex-grow: 1;
+  font-size: 24px;
+  font-family: arial;
 }

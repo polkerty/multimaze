@@ -102,7 +102,9 @@ export default class Builder extends Component {
     const hash = window.location.hash?.slice(1);
     const state = decodedState(hash);
     if (state) {
-      this.applyStateChange(state.definition);
+      this.load({
+        definition: state.definition,
+      });
     }
   }
 
@@ -175,46 +177,43 @@ export default class Builder extends Component {
   }
 
   processDimRaw(value) {
-    value = [...value].filter(n => '0123456789'.includes(n)).join('');
-    if ( !value.length) return;
+    value = [...value].filter((n) => "0123456789".includes(n)).join("");
+    if (!value.length) return;
     let num = parseInt(value);
-    if (num < 1 ) num = 1;
-    if (num > 12) num = 12;
+    if (num < 1) num = 1;
+    if (num > 30) num = 30;
     return num;
   }
 
   setRows(value) {
     const num = this.processDimRaw(value);
-    if ( !num ) return;
+    if (!num) return;
 
     const newDefinition = makeBlankDefinition(num, this.state.cols);
-    for ( let i = 0; i < num && i < this.state.rows; ++i ) {
-      for ( let j = 0; j < this.state.cols; ++j ) {
-          newDefinition[i][j] = this.state.definition[i][j].slice();
+    for (let i = 0; i < num && i < this.state.rows; ++i) {
+      for (let j = 0; j < this.state.cols; ++j) {
+        newDefinition[i][j] = this.state.definition[i][j].slice();
       }
     }
 
     this.setState({ rows: num });
-    this.applyStateChange( newDefinition);
-    
+    this.applyStateChange(newDefinition);
   }
 
   setCols(value) {
     const num = this.processDimRaw(value);
-    if ( !num ) return;
+    if (!num) return;
 
     const newDefinition = makeBlankDefinition(this.state.rows, num);
-    for ( let i = 0; i < this.state.rows; ++i ) {
-      for ( let j = 0; j < num && j < this.state.cols; ++j ) {
-          newDefinition[i][j] = this.state.definition[i][j].slice();
+    for (let i = 0; i < this.state.rows; ++i) {
+      for (let j = 0; j < num && j < this.state.cols; ++j) {
+        newDefinition[i][j] = this.state.definition[i][j].slice();
       }
     }
 
     this.setState({ cols: num });
-    this.applyStateChange( newDefinition);
-
+    this.applyStateChange(newDefinition);
   }
-
 
   render() {
     return (
@@ -222,7 +221,9 @@ export default class Builder extends Component {
         <h1 className={"game-title"}>Create Your Own Level</h1>
         <p>
           Tip: You can share this URL. Send us{" "}
-          <a className="email" href="mailto:jacob.brazeal@gmail.com">an email</a>{' '}
+          <a className="email" href="mailto:jacob.brazeal@gmail.com">
+            an email
+          </a>{" "}
           with a link to your puzzle. We might feature it in the future and
           credit you!
         </p>
@@ -241,9 +242,19 @@ export default class Builder extends Component {
           </div>
           <div className="builder__tools-pane">
             <div className="builder__tools__dims">
-              <input value={this.state.rows} onChange={(e)=>this.setRows(e.target.value)} className="builder__tools__dim" />
+              <input
+                defaultValue={this.state.rows}
+                key={"r" + this.state.rows}
+                onChange={(e) => this.setRows(e.target.value)}
+                className="builder__tools__dim"
+              />
               &#10005;
-              <input value={this.state.cols} onChange={(e)=>this.setCols(e.target.value)}  className="builder__tools__dim" />
+              <input
+                defaultValue={this.state.cols}
+                key={"c" + this.state.cols}
+                onChange={(e) => this.setCols(e.target.value)}
+                className="builder__tools__dim"
+              />
             </div>
             <div className="builder__tools__token-picker">
               {Object.values(TOKEN).map((token) => (
@@ -268,9 +279,7 @@ export default class Builder extends Component {
           </div>
         </div>
 
-        <p>
-          You can pre-load from any of the existing puzzles in our library.
-        </p>
+        <p>You can pre-load from any of the existing puzzles in our library.</p>
 
         <Library onClick={(level) => this.load(level)} />
       </div>
@@ -282,7 +291,7 @@ function Analysis(props) {
   const BASE_CLASS = "builder__tools__analysis";
   if (props.analyzing) {
     return (
-      <div className={BASE_CLASS}>
+      <div style={{margin: '30px'}}>
         <div class="lds-spinner">
           <div></div>
           <div></div>
