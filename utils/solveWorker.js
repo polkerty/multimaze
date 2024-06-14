@@ -125,7 +125,7 @@ class Board {
         return { aborted: true }
       }
 
-      if ( i % 3000 ) await checkEventLoop();
+      // if ( i % 3000 ) await checkEventLoop();
 
       if (i > 50000 && best.target) break;
 
