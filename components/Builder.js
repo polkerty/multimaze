@@ -4,6 +4,7 @@ import InputHandler from "../utils/inputHandler";
 import LevelConfig from "../utils/levelConfig";
 import solver from "../utils/workerManager";
 import Library from "./Library";
+import LibraryModal from "./LibraryModal";
 
 if (typeof window !== "undefined") window.solver = solver;
 
@@ -80,6 +81,7 @@ export default class Builder extends Component {
       history: [],
       analysis: null,
       analyzing: false,
+      libraryOpen: false,
     };
   }
 
@@ -270,6 +272,14 @@ export default class Builder extends Component {
                 />
               ))}
             </div>
+            <div>
+              <button
+                className={"tool-btn tool-btn--launch-library"}
+                onClick={() => this.setState({ libraryOpen: true })}
+              >
+                Library
+              </button>
+            </div>
             {(this.state.analysis || this.state.analyzing) && (
               <Analysis
                 {...this.state.analysis}
@@ -279,9 +289,14 @@ export default class Builder extends Component {
           </div>
         </div>
 
-        <p>You can pre-load from any of the existing puzzles in our library.</p>
-
-        <Library onClick={(level) => this.load(level)} />
+        <LibraryModal
+          onClick={(level) => {
+            this.setState({ libraryOpen: false });
+            this.load(level);
+          }}
+          open={this.state.libraryOpen}
+          onClose={() => this.setState({ libraryOpen: false })}
+        />
       </div>
     );
   }
@@ -291,7 +306,7 @@ function Analysis(props) {
   const BASE_CLASS = "builder__tools__analysis";
   if (props.analyzing) {
     return (
-      <div style={{margin: '30px'}}>
+      <div style={{ margin: "30px" }}>
         <div class="lds-spinner">
           <div></div>
           <div></div>

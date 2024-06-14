@@ -635,7 +635,7 @@ footer a {
   border-radius: 5px;
   align-self: stretch;
   display: flex;
-  flex-direction:  column;
+  flex-direction: column;
 }
 
 .builder__tools__token-picker {
@@ -657,6 +657,26 @@ footer a {
 }
 
 .builder__tools__token-btn:focus {
+  background: #888;
+  box-shadow: 2px 2px 2px #888 inset;
+}
+
+.tool-btn {
+  background: white;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  font-size: 18pt;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.tool-btn:hover {
+  background: #ccc;
+  box-shadow: 2px 2px 2px #888;
+}
+
+.tool-btn:focus {
   background: #888;
   box-shadow: 2px 2px 2px #888 inset;
 }
@@ -819,4 +839,54 @@ footer a {
   flex-grow: 1;
   font-size: 24px;
   font-family: arial;
+}
+
+.lib-modal__wrap {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.lib-modal__bg {
+  width: 100%;
+  height: 100%;
+  background: black;
+  opacity: 0.9;
+}
+
+.lib-modal {
+  z-index: 1;
+  background: white;
+  width: 80%;
+  height: 80%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+}
+
+.lib-modal__body {
+  flex-grow: 1;
+  overflow: scroll;
+  padding: 12px;
+}
+
+.lib-modal__header {
+  display: flex;
+  font-size: 30pt;
+  padding: 12px;
+}
+
+.lib-modal__header__spacer {
+  flex-grow: 1;
+}
+
+.lib-modal__header__close {
+  cursor: pointer;
+  color: red;
 }
