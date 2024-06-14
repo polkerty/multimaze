@@ -43,7 +43,7 @@ export default class Library extends Component {
           return (
             <div className="shelf">
               <h2>{group.name}</h2>
-              <Sequence levels={group.levels} />
+              <Sequence levels={group.levels} onClick={this.props.onClick} />
             </div>
           );
         })}

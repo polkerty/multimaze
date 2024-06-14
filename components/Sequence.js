@@ -11,7 +11,7 @@ export default class Sequence extends Component {
       <div className={"sequence-wrap"}>
         {this.props.levels.map((level) => {
           return (
-            <div className="sequence">
+            <div className="sequence" tabIndex={-1} onClick={()=>this.props.onClick(level)} >
               <Level
                 key={level.id}
                 levelId={level.id}

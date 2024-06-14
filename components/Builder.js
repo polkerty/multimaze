@@ -68,7 +68,6 @@ export default class Builder extends Component {
     this.analysisRequests = [];
 
     this.state = {
-      //TODO: allow loading levels/groups from lib
       rows: defaultRows,
       cols: defaultCols,
       definition: makeBlankDefinition(defaultRows, defaultCols),
@@ -76,7 +75,19 @@ export default class Builder extends Component {
       version: 0,
       history: [],
       analysis: null,
+      analyzing: false,
     };
+  }
+
+  load(level) {
+    this.setState({
+      rows: level.definition.length,
+      cols: level.definition[0].length,
+      definition: level.definition,
+      version: this.state.version + 1,
+      analysis: null,
+    });
+    this.updateAnalysis(level.definition);
   }
 
   componentDidMount() {
@@ -133,12 +144,13 @@ export default class Builder extends Component {
     // We would also like to analyze the position using our web worker.
     // But we need to disregard any previous analysis requests.
 
-    this.updateAnalysis(definition)
+    this.updateAnalysis(definition);
   }
 
   updateAnalysis(definition, deathByes) {
     const pos = this.analysisRequests.length;
-    console.log("requesting solve of def: ", definition)
+    console.log("requesting solve of def: ", definition);
+    this.setState({ analyzing: true });
     this.analysisRequests.push(
       window.solver.solve(definition, deathByes).then((result) => {
         console.log("Got result!", result);
@@ -146,10 +158,9 @@ export default class Builder extends Component {
           // Another request has been made since we initiated this request; abort.
           return;
         }
-        this.setState({ analysis: result });
+        this.setState({ analysis: result, analyzing: false });
       })
     );
-
   }
 
   render() {
@@ -184,11 +195,16 @@ export default class Builder extends Component {
                 />
               ))}
             </div>
-            {this.state.analysis && <Analysis {...this.state.analysis} />}
+            {(this.state.analysis || this.state.analyzing) && (
+              <Analysis
+                {...this.state.analysis}
+                analyzing={this.state.analyzing}
+              />
+            )}
           </div>
         </div>
 
-        <Library/>
+        <Library onClick={(level) => this.load(level)} />
       </div>
     );
   }
@@ -196,11 +212,29 @@ export default class Builder extends Component {
 
 function Analysis(props) {
   const BASE_CLASS = "builder__tools__analysis";
+  if (props.analyzing) {
+    return (
+      <div className={BASE_CLASS}>
+        <div class="lds-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    );
+  }
   if (props.won) {
     return (
-      <div className={BASE_CLASS + " " + (BASE_CLASS + "--won")}>
-        You win!
-      </div>
+      <div className={BASE_CLASS + " " + (BASE_CLASS + "--won")}>You win!</div>
     );
   }
   if (props.tooHard) {
@@ -217,7 +251,5 @@ function Analysis(props) {
       </div>
     );
   }
-  return (
-    <div className={BASE_CLASS}>{props.moveCount} moves</div>
-  );
+  return <div className={BASE_CLASS}>{props.moveCount} moves</div>;
 }
