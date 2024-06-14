@@ -11,6 +11,16 @@ function cloneDeep(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+function encodedState(definition) {
+  return btoa(JSON.stringify(definition));
+}
+
+function decodedState(code) {
+  if (!code?.length) return null;
+  return JSON.parse(atob(code));
+}
+
+
 const LEGAL_TOKEN_PAIRS = [
   [TOKEN.COLLAPSE, TOKEN.COIN],
   [TOKEN.COLLAPSE, TOKEN.BARRIER],
@@ -90,6 +100,11 @@ export default class Builder extends Component {
       return;
     }
     // TODO: load state from URL (also update URL with state)
+    const hash = window.location.hash?.slice(1);
+    const state = decodedState(hash);
+    if (state) {
+      this.applyStateChange(state.definition);
+    }
   }
 
   clickHandler(props) {
@@ -135,6 +150,9 @@ export default class Builder extends Component {
   applyStateChange(definition) {
     this.state.history.push(this.state.definition);
     this.setState({ definition, version: this.state.version + 1 });
+    // Update URL
+    window.location.hash = encodedState({ definition });
+
 
     // We would also like to analyze the position using our web worker.
     // But we need to disregard any previous analysis requests.
