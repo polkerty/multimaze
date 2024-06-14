@@ -1,9 +1,12 @@
 // We always just respond to external messages.
 // So we just need to keep track of the ID of the request we're responding to.
+let lastMessageId;
+
 class Controller {
   constructor() {
     onmessage = (e) => {
       const { payload, messageId } = e.data;
+      lastMessageId = messageId;
 
       this.handle(payload, messageId);
     };
@@ -13,11 +16,11 @@ class Controller {
     postMessage({ payload, messageId });
   }
 
-  handle(payload, messageId) {
+  async handle(payload, messageId) {
     let response;
     switch (payload.action) {
       case "solve":
-        response = this.solve(payload.definition, payload.deathByes);
+        response = await this.solve(payload.definition, payload.deathByes, messageId);
         break;
       default:
         response = { error: "Action not recognized: " + payload.action };
@@ -25,9 +28,9 @@ class Controller {
     this.respond(response, messageId);
   }
 
-  solve(definition, deathByes) {
+  async solve(definition, deathByes, messageId) {
     const root = new Board({ grid: definition, deathByes });
-    const solution = root.aiSimple();
+    const solution = await root.aiSimple(messageId);
 
     if (!solution) {
       return { impossible: true, moveCount: -1 };
@@ -70,6 +73,10 @@ function fastCopy(arr) {
   return newArr;
 }
 
+async function checkEventLoop() {
+  return new Promise(resolve => setTimeout(resolve, 0));
+}
+
 class Board {
   constructor({ grid, deathByes }, options = {}) {
     this.definition = grid;
@@ -96,7 +103,8 @@ class Board {
 
   }
 
-  aiSimple(maxIter = 50000) {
+  async aiSimple(messageId) {
+    const maxIter = 100000;
 
     const startTime = new Date().getTime();
     console.log("Neighbors: ", this.getNeighbors());
@@ -113,6 +121,12 @@ class Board {
 
     let i = 0;
     while (queue.length && i++ < maxIter) {
+      if ( lastMessageId !== messageId) {
+        return { aborted: true }
+      }
+
+      if ( i % 3000 ) await checkEventLoop();
+
       if (i > 50000 && best.target) break;
 
       const [next, path] = queue.shift();

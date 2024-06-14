@@ -57,8 +57,8 @@ export default class Builder extends Component {
 
     this.inputHandler = new InputHandler();
 
-    const defaultRows = 5,
-      defaultCols = 5;
+    const defaultRows = 10,
+      defaultCols = 10;
 
     this.analysisRequests = [];
 
