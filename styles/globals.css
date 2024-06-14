@@ -722,11 +722,11 @@ footer a {
   color: currentColor;
   display: inline-block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 30px;
+  height: 30px;
 }
 .lds-spinner div {
-  transform-origin: 40px 40px;
+  transform-origin: 15px 15px;
   animation: lds-spinner 1.2s linear infinite;
 }
 .lds-spinner div:after {
