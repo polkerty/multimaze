@@ -8,6 +8,7 @@ import Celebrate from "../utils/celebrate";
 import InputHandler from "../utils/inputHandler";
 import LevelConfig from "../utils/levelConfig";
 import solver from "../utils/workerManager";
+import Library from "./Library";
 
 if (typeof window !== "undefined") window.solver = solver;
 
@@ -186,6 +187,8 @@ export default class Builder extends Component {
             {this.state.analysis && <Analysis {...this.state.analysis} />}
           </div>
         </div>
+
+        <Library/>
       </div>
     );
   }

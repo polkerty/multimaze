@@ -701,3 +701,16 @@ footer a {
     color: darkgreen;
 
 }
+
+.sequence-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.sequence {
+    display: flex;
+    width: 100px;
+    /* flex-grow: 1;  */
+    margin: 5px;
+    /* min-width: 100px; */
+}

@@ -82,6 +82,8 @@ export default class Level extends Component {
   componentDidMount() {
     this.board.restart();
 
+    if ( !this.props.inputHandler) return;
+
     this.props.inputHandler.clearAll();
     this.props.inputHandler.on(
       "swap",
@@ -190,7 +192,7 @@ export default class Level extends Component {
   }
 
   componentWillUnmount() {
-    this.props.inputHandler.clearAll();
+    this.props.inputHandler?.clearAll();
   }
 }
 
