@@ -174,6 +174,48 @@ export default class Builder extends Component {
     );
   }
 
+  processDimRaw(value) {
+    value = [...value].filter(n => '0123456789'.includes(n)).join('');
+    if ( !value.length) return;
+    let num = parseInt(value);
+    if (num < 1 ) num = 1;
+    if (num > 12) num = 12;
+    return num;
+  }
+
+  setRows(value) {
+    const num = this.processDimRaw(value);
+    if ( !num ) return;
+
+    const newDefinition = makeBlankDefinition(num, this.state.cols);
+    for ( let i = 0; i < num && i < this.state.rows; ++i ) {
+      for ( let j = 0; j < this.state.cols; ++j ) {
+          newDefinition[i][j] = this.state.definition[i][j].slice();
+      }
+    }
+
+    this.setState({ rows: num });
+    this.applyStateChange( newDefinition);
+    
+  }
+
+  setCols(value) {
+    const num = this.processDimRaw(value);
+    if ( !num ) return;
+
+    const newDefinition = makeBlankDefinition(this.state.rows, num);
+    for ( let i = 0; i < this.state.rows; ++i ) {
+      for ( let j = 0; j < num && j < this.state.cols; ++j ) {
+          newDefinition[i][j] = this.state.definition[i][j].slice();
+      }
+    }
+
+    this.setState({ cols: num });
+    this.applyStateChange( newDefinition);
+
+  }
+
+
   render() {
     return (
       <div className={"builder-wrap"}>
@@ -198,6 +240,11 @@ export default class Builder extends Component {
             />
           </div>
           <div className="builder__tools-pane">
+            <div className="builder__tools__dims">
+              <input value={this.state.rows} onChange={(e)=>this.setRows(e.target.value)} className="builder__tools__dim" />
+              &#10005;
+              <input value={this.state.cols} onChange={(e)=>this.setCols(e.target.value)}  className="builder__tools__dim" />
+            </div>
             <div className="builder__tools__token-picker">
               {Object.values(TOKEN).map((token) => (
                 <TokenButton

@@ -16,10 +16,9 @@ a {
 }
 
 a.email {
-    color: cornflowerblue;
-    text-decoration: underline;
-  }
-  
+  color: cornflowerblue;
+  text-decoration: underline;
+}
 
 * {
   box-sizing: border-box;
@@ -801,4 +800,17 @@ footer a {
   100% {
     opacity: 0;
   }
+}
+
+.builder__tools__dims {
+  display: flex;
+}
+
+.builder__tools__dim {
+  width: 30px;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  flex-grow: 1;
 }
