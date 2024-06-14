@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import { faQuestionCircle, faTrophy } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Level, { Cell, TOKEN } from "./level";
-import Leaderboard from "./leaderboard";
-import { Board } from "../utils/logic";
-import Celebrate from "../utils/celebrate";
 import InputHandler from "../utils/inputHandler";
 import LevelConfig from "../utils/levelConfig";
 import solver from "../utils/workerManager";
