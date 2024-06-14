@@ -20,7 +20,6 @@ function decodedState(code) {
   return JSON.parse(atob(code));
 }
 
-
 const LEGAL_TOKEN_PAIRS = [
   [TOKEN.COLLAPSE, TOKEN.COIN],
   [TOKEN.COLLAPSE, TOKEN.BARRIER],
@@ -153,7 +152,6 @@ export default class Builder extends Component {
     // Update URL
     window.location.hash = encodedState({ definition });
 
-
     // We would also like to analyze the position using our web worker.
     // But we need to disregard any previous analysis requests.
 
@@ -180,6 +178,12 @@ export default class Builder extends Component {
     return (
       <div className={"builder-wrap"}>
         <h1 className={"game-title"}>Create Your Own Level</h1>
+        <p>
+          Tip: You can share this URL. Send us{" "}
+          <a className="email" href="mailto:jacob.brazeal@gmail.com">an email</a>{' '}
+          with a link to your puzzle. We might feature it in the future and
+          credit you!
+        </p>
 
         {/* TODO: Allow entering level + description */}
 
@@ -266,10 +270,14 @@ function Analysis(props) {
   }
   const nextMove = props.path[0].toString();
   const moveSymbols = {
-    '0,1': '→',
-    '1,0': '↓',
-    '0,-1': '←',
-    '-1,0': '↑'
-  }
-  return <div className={BASE_CLASS}>{props.moveCount} moves {moveSymbols[nextMove]}</div>;
+    "0,1": "→",
+    "1,0": "↓",
+    "0,-1": "←",
+    "-1,0": "↑",
+  };
+  return (
+    <div className={BASE_CLASS}>
+      {props.moveCount} moves {moveSymbols[nextMove]}
+    </div>
+  );
 }

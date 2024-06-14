@@ -15,6 +15,12 @@ a {
   text-decoration: none;
 }
 
+a.email {
+    color: cornflowerblue;
+    text-decoration: underline;
+  }
+  
+
 * {
   box-sizing: border-box;
 }
