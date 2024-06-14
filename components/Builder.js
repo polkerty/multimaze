@@ -264,5 +264,12 @@ function Analysis(props) {
       </div>
     );
   }
-  return <div className={BASE_CLASS}>{props.moveCount} moves</div>;
+  const nextMove = props.path[0].toString();
+  const moveSymbols = {
+    '0,1': '→',
+    '1,0': '↓',
+    '0,-1': '←',
+    '-1,0': '↑'
+  }
+  return <div className={BASE_CLASS}>{props.moveCount} moves {moveSymbols[nextMove]}</div>;
 }
