@@ -221,6 +221,10 @@ export default class Builder extends Component {
           </div>
         </div>
 
+        <p>
+          You can pre-load from any of the existing puzzles in our library.
+        </p>
+
         <Library onClick={(level) => this.load(level)} />
       </div>
     );
