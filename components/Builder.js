@@ -193,6 +193,13 @@ export default class Builder extends Component {
 
 function Analysis(props) {
   const BASE_CLASS = "builder__tools__analysis";
+  if (props.won) {
+    return (
+      <div className={BASE_CLASS + " " + (BASE_CLASS + "--won")}>
+        You win!
+      </div>
+    );
+  }
   if (props.tooHard) {
     return (
       <div className={BASE_CLASS + " " + (BASE_CLASS + "--hard")}>

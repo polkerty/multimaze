@@ -695,3 +695,9 @@ footer a {
     color: orange;
 
 }
+
+.builder__tools__analysis--won {
+    border: 1px solid darkgreen;
+    color: darkgreen;
+
+}

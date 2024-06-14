@@ -32,7 +32,8 @@ class Controller {
     if (!solution) {
       return { impossible: true, moveCount: -1 };
     }
-    return { moveCount: solution.length, path: solution }; // The answer!
+
+    return { moveCount: solution.length, path: solution, won: solution.length === 0 }; // The answer!
   }
 }
 
