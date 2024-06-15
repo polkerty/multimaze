@@ -5,15 +5,15 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <iframe
-        src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%hardestmaze.com%2F&layout=button_count&size=large&appId=1809798882663411&width=88&height=28"
-        width="110"
-        height="28"
+        src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fhardestmaze.com&layout&size&appId=1809798882663411&width=77&height=20"
+        width="77"
+        height="20"
         style={{ border: "none", overflow: "hidden" }}
         scrolling="no"
-        frameBorder="0"
-        allowFullScreen={true}
+        frameborder="0"
+        allowfullscreen="true"
         allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-      />
+      ></iframe>{" "}
       <a
         href="https://twitter.com/share?ref_src=twsrc%5Etfw"
         className="twitter-share-button"
@@ -25,9 +25,11 @@ export default function Footer() {
       >
         Tweet
       </a>
-      <span style={{ marginRight: "15px" }}>&copy; 2021-2024 Beren Gunsolus</span>{" "}
+      <span style={{ marginRight: "15px" }}>
+        &copy; 2021-2024 Beren Gunsolus
+      </span>{" "}
       <span style={{ color: "gray", display: "flex", fontSize: "smaller" }}>
-       and{" "}
+        and{" "}
         <a target="_blank" href={"https://jacobbrazeal.com"}>
           Jacob Brazeal
         </a>
