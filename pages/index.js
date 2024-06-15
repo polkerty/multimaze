@@ -1,11 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-
-// import dynamic from 'next/dynamic'
-
+import Footer from "../components/footer";
 import Controller from "./controller";
-
-// const Controller = dynamic(() => import('./controller'))
 
 function makeAnalyticsScript(id) {
   return `window.dataLayer = window.dataLayer || [];

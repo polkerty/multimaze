@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-// import Level from "./level";
 import {faQuestionCircle, faTrophy} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Help from './help'
