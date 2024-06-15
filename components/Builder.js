@@ -3,7 +3,6 @@ import Level, { Cell, TOKEN } from "./level";
 import InputHandler from "../utils/inputHandler";
 import LevelConfig from "../utils/levelConfig";
 import solver from "../utils/workerManager";
-import Library from "./Library";
 import LibraryModal from "./LibraryModal";
 
 if (typeof window !== "undefined") window.solver = solver;
@@ -151,8 +150,14 @@ export default class Builder extends Component {
   }
 
   clear() {
-    this.applyStateChange(makeBlankDefinition(this.state.rows, this.state.cols));
     window.location.hash = '';
+    window.solver.refresh();
+    this.setState({
+      analysis: null,
+      analyzing: false
+    });
+    this.applyStateChange(makeBlankDefinition(this.state.rows, this.state.cols));
+
   }
 
   applyStateChange(definition) {

@@ -3,6 +3,10 @@ import SolveWorker from 'worker-loader!./solveWorker.js';
 
 class SolveWorkerManager {
     constructor() {
+        this.setup();
+    }
+
+    setup() {
         if ( typeof window !== 'undefined' && window.Worker ) {
             this.worker = new SolveWorker();
             this.worker.onmessage = e => {
@@ -33,6 +37,11 @@ class SolveWorkerManager {
 
     async solve(definition, deathByes) {
         return this.message({ action: 'solve', definition, deathByes })
+    }
+
+    refresh() {
+        this.worker.terminate();
+        this.setup();
     }
 }
 
