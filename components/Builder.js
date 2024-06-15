@@ -20,6 +20,29 @@ function decodedState(code) {
   return JSON.parse(atob(code));
 }
 
+// thank you, chatgpt
+function copyText(value) {
+  // Use the Clipboard API if available
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(value).then(() => {
+      alert('Level code copied to clipboard');
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
+  } else {
+    // Fallback for browsers that do not support the Clipboard API
+    const textArea = document.createElement('textarea');
+    textArea.value = value;
+    document.body.appendChild(textArea);
+    textArea.select();
+    textArea.setSelectionRange(0, 99999); // For mobile devices
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert('Level code copied to clipboard');
+  }
+}
+
+
 const LEGAL_TOKEN_PAIRS = [
   [TOKEN.COLLAPSE, TOKEN.COIN],
   [TOKEN.COLLAPSE, TOKEN.BARRIER],
@@ -94,6 +117,10 @@ export default class Builder extends Component {
       analysis: null,
     });
     this.updateAnalysis(level.definition);
+  }
+
+  copyDefinition() {
+    copyText(JSON.stringify(this.state.definition));
   }
 
   componentDidMount() {
@@ -297,6 +324,14 @@ export default class Builder extends Component {
                 onClick={() => this.setState({ libraryOpen: true })}
               >
                 Library
+              </button>
+            </div>
+            <div>
+              <button
+                className={"tool-btn"}
+                onClick={() => this.copyDefinition()}
+              >
+                Copy
               </button>
             </div>
             {(this.state.analysis || this.state.analyzing) && (
