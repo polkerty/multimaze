@@ -150,6 +150,11 @@ export default class Builder extends Component {
     this.applyStateChange(newDefinition);
   }
 
+  clear() {
+    this.applyStateChange(makeBlankDefinition(this.state.rows, this.state.cols));
+    window.location.hash = '';
+  }
+
   applyStateChange(definition) {
     this.state.history.push(this.state.definition);
     this.setState({ definition, version: this.state.version + 1 });
@@ -271,6 +276,14 @@ export default class Builder extends Component {
                   }}
                 />
               ))}
+            </div>
+            <div>
+              <button
+                className={"tool-btn"}
+                onClick={() => this.clear()}
+              >
+                Clear
+              </button>
             </div>
             <div>
               <button
