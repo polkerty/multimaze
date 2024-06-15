@@ -24,24 +24,26 @@ function decodedState(code) {
 function copyText(value) {
   // Use the Clipboard API if available
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(value).then(() => {
-      alert('Level code copied to clipboard');
-    }).catch(err => {
-      console.error('Failed to copy text: ', err);
-    });
+    navigator.clipboard
+      .writeText(value)
+      .then(() => {
+        alert("Level code copied to clipboard");
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
   } else {
     // Fallback for browsers that do not support the Clipboard API
-    const textArea = document.createElement('textarea');
+    const textArea = document.createElement("textarea");
     textArea.value = value;
     document.body.appendChild(textArea);
     textArea.select();
     textArea.setSelectionRange(0, 99999); // For mobile devices
-    document.execCommand('copy');
+    document.execCommand("copy");
     document.body.removeChild(textArea);
-    alert('Level code copied to clipboard');
+    alert("Level code copied to clipboard");
   }
 }
-
 
 const LEGAL_TOKEN_PAIRS = [
   [TOKEN.COLLAPSE, TOKEN.COIN],
@@ -178,14 +180,15 @@ export default class Builder extends Component {
   }
 
   clear() {
-    window.location.hash = '';
+    window.location.hash = "";
     window.solver.refresh();
     this.setState({
       analysis: null,
-      analyzing: false
+      analyzing: false,
     });
-    this.applyStateChange(makeBlankDefinition(this.state.rows, this.state.cols));
-
+    this.applyStateChange(
+      makeBlankDefinition(this.state.rows, this.state.cols)
+    );
   }
 
   applyStateChange(definition) {
@@ -281,6 +284,22 @@ export default class Builder extends Component {
             />
           </div>
           <div className="builder__tools-pane">
+            <div className="builder__tools__token-picker">
+              {Object.values(TOKEN).map((token) => (
+                <TokenButton
+                  key={token}
+                  active={token === this.state.activeToken}
+                  type={token}
+                  onClick={() => {
+                    this.setState({
+                      activeToken: token,
+                    });
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="builder__tools-pane">
             <div className="builder__tools__dims">
               <input
                 defaultValue={this.state.rows}
@@ -296,25 +315,8 @@ export default class Builder extends Component {
                 className="builder__tools__dim"
               />
             </div>
-            <div className="builder__tools__token-picker">
-              {Object.values(TOKEN).map((token) => (
-                <TokenButton
-                  key={token}
-                  active={token === this.state.activeToken}
-                  type={token}
-                  onClick={() => {
-                    this.setState({
-                      activeToken: token,
-                    });
-                  }}
-                />
-              ))}
-            </div>
             <div>
-              <button
-                className={"tool-btn"}
-                onClick={() => this.clear()}
-              >
+              <button className={"tool-btn"} onClick={() => this.clear()}>
                 Clear
               </button>
             </div>

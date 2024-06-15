@@ -28,7 +28,7 @@ a.email {
 
 .level-wrap,
 .builder-wrap {
-  width: calc(100vh - 250px);
+  width: calc(100vw - 250px);
   max-width: calc(100vw - 20px); /* Backwards compatibility */
   max-width: min(800px, calc(100vw - 20px));
 }
