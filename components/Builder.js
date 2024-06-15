@@ -85,6 +85,7 @@ export default class Builder extends Component {
   }
 
   load(level) {
+    this.clear(); // this resets the solver, etc.
     this.setState({
       rows: level.definition.length,
       cols: level.definition[0].length,
