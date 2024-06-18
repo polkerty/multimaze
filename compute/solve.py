@@ -11,20 +11,34 @@ COIN = 7
 
 MAX_ITERS = 100000
 
-def get_neighbors(state, player_squares, coin_count, is_dead):
+def get_neighbors(state, death_byes, player_squares, coin_count, is_dead):
     n = []
     if is_dead:
         return n
     for m in ((0, 1), (1, 0), (0, -1), (-1, 0)):
-        did_state_change, neighbor  = apply(state,player_squares, coin_count, m)
+        did_state_change, neighbor  = apply(state, death_byes, player_squares, coin_count, m)
         if did_state_change:
             n.append((m, neighbor))
     return n
 
-def apply(state, player_squares, coin_count, move):
+# Note: DEATH_BYES are a very nuanced field. We pass them around
+# everywhere, but mostly for very subtle reasons, as the logic
+# they encapsulate is checked immediately after they are generated
+# within this function.
+# Nevertheless, we want to return the death_byes from the function because they represent 
+# state, which we use in the memoization of the solver function,
+# and we even pass in the *previous* death_byes to this function to help us understand
+# if that demonstrates this pass will not be a no-op, even if the contents
+# of the grid do not change.
+def apply(state, death_byes, player_squares, coin_count, move):
     updates = {}
     new_player_targets = set()
-    state_change = False
+    new_death_byes = []
+
+    # If the previous step generated a death bye, that guarantees 
+    # that THIS step would invalidate it, so it will not be a no-op.
+    # (But there are many other ways for this to not be a no-op.)
+    is_no_op = len(death_byes) > 0
     for (px, py) in player_squares:
         (tx, ty) = (px + move[0], py + move[1])
         if tx < 0 or ty < 0 or tx > len(state) or ty > len(state[0]):
@@ -32,7 +46,7 @@ def apply(state, player_squares, coin_count, move):
             continue
 
         #### RULES ######
-        target = state[tx][ty]
+        target = tuple(sorted(state[tx][ty]))
 
         new_target = []
         can_move_onto = True
@@ -60,6 +74,7 @@ def apply(state, player_squares, coin_count, move):
                 # We're blocked, but the boulder will also be broken.
                 can_move_onto = False
             elif COLLAPSE == sq:
+                new_death_byes.append((tx, ty))
                 new_target.append(DEATH)
             elif WALL == sq:
                 state_change_blocked = True
@@ -73,16 +88,23 @@ def apply(state, player_squares, coin_count, move):
                 continue
 
         if not state_change_blocked:
-            state_change = True
+            is_no_op = True
 
-        new_target = tuple(sorted(target)) # Canonical form
-        updates[(tx, ty)] = new_target
+        new_target = tuple(sorted(new_target)) # Canonical form
+        if target != new_target:
+            updates[(tx, ty)] = new_target
     
         # Assign player squares.
         if can_move_onto:
             new_player_targets.add((tx, ty))
         else:
             new_player_targets.add((px, py))
+
+    new_death_byes = tuple(sorted(new_death_byes))
+    if not is_no_op:
+        # Assume no win/loss, since we wouldn't be attempting a move if we had.
+        # Since we had no mutations, save the trouble of copying state (below).
+        return is_no_op, (state, new_death_byes, player_squares, coin_count, False, False)
 
     # Construct next state.
             
@@ -100,15 +122,16 @@ def apply(state, player_squares, coin_count, move):
             
     # Check player squares for death and win conditions. 
     new_player_targets = tuple(sorted(list(new_player_targets)))
-    has_won, has_died = check_win_death(new_state, new_player_targets, coin_count)
+    # Note that the new death_byes are used here.
+    has_won, has_died = check_win_death(new_state, new_death_byes, new_player_targets, coin_count)
 
-    return state_change, (new_state, new_player_targets, coin_count, has_won, has_died)
+    return is_no_op, (new_state, new_death_byes, new_player_targets, coin_count, has_won, has_died)
 
-def check_win_death(state, player_squares, coin_count):
+def check_win_death(state, death_byes, player_squares, coin_count):
     has_won = coin_count == 0
     has_died = False
     for (x, y) in player_squares:
-        if DEATH in state[x][y]:
+        if DEATH in state[x][y] and (x, y) not in death_byes:
             has_died = True
         if FINISH1 not in state[x][y]:
             has_won = False
@@ -127,13 +150,16 @@ def find_players_and_coins(state):
 
 
 from collections import deque
+from time import time
 def solve(state, lim=MAX_ITERS):
+    now = time()
 
     # Get information about initial state.
     player_squares, coin_count = find_players_and_coins(state)
-    has_won, has_died = check_win_death(state, player_squares, coin_count)
-
-    q = deque([(state, player_squares, coin_count, has_won, has_died, ())]) # Extra tuple is for history.
+    death_byes = ()
+    has_won, has_died = check_win_death(state, death_byes, player_squares, coin_count)
+    history = ()
+    q = deque([(state, death_byes, player_squares, coin_count, has_won, has_died, history)])
     iters = 0
     seen = set()
 
@@ -143,32 +169,35 @@ def solve(state, lim=MAX_ITERS):
     while len(q) and iters < lim:
         iters += 1
 
-        # print(q[0][-1], q[0][1], q[0][3], q[0][4])
-        (state, player_squares, coin_count, has_won, is_dead, history) = q.popleft()
+        # print(q[0][-1], q[0][1])
 
-        if (state, player_squares) in seen:
+        (state, death_byes, player_squares, coin_count, has_won, is_dead, history) = q.popleft()
+
+        if (state, death_byes, player_squares) in seen:
             continue
-        seen.add((state, player_squares))
+        seen.add((state, death_byes, player_squares))
         if has_won:
-            return history, iters
+            return history, iters, (time() - now)
         if is_dead:
             continue
-        neighbors = get_neighbors(state, player_squares, coin_count, is_dead)
+        neighbors = get_neighbors(state, death_byes, player_squares, coin_count, is_dead)
         for m, n in neighbors:
             if (n[0], n[1]) in seen:
                 continue
             h = history + (m, )
             q.append(n + (h,))
 
-    return None, iters
+    total_time = time() - now
+
+    return None, iters, total_time
 
 
 
     
 def print_ans(name, ans):
-    (result, iters) = ans
+    (result, iters, duration) = ans
     if not result:
-        print(f"{name}: No solution found in {iters} iterations.")
+        print(f"{name}: No solution found in {iters} iterations ({duration} secs).")
     else:
         for move in result:
             if move == (0, 1):
@@ -179,7 +208,7 @@ def print_ans(name, ans):
                 print("Up")
             elif move == (0, -1):
                 print("Left")
-        print(f"{name}: {len(result)} moves - Solved in {iters} iterations.")
+        print(f"{name}: {len(result)} moves - Solved in {iters} iterations ({duration} secs).")
 
 def json_to_tuple(grid):
     return tuple(tuple(tuple(cell) for cell in row) for row in grid)

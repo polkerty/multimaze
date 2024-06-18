@@ -153,7 +153,7 @@ class Board {
       }
     }
 
-    console.log(memo, Object.values(memo).length, best, "won?", best.target?.hasWon());
+    console.log(memo, Object.values(memo).length, i, best, "won?", best.target?.hasWon());
     console.log(
       "AI runtime (sec): ",
       (new Date().getTime() - startTime) / 1000
