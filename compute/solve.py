@@ -10,6 +10,7 @@ COIN = 7
 
 
 MAX_ITERS = 1000000
+VERBOSE = False
 
 def print_state(state, death_byes, player_squares, coin_count):
     for r in state:
@@ -77,6 +78,8 @@ def apply(state, death_byes, player_squares, coin_count, move):
                 if not BARRIER in target:
                     new_death_byes.append((tx, ty))
                     new_target.append(DEATH)
+                else:
+                    new_target.append(COLLAPSE)
             elif WALL == sq:
                 state_change_blocked = True
                 can_move_onto = False
@@ -163,12 +166,15 @@ from time import time
 def solve(state, lim=MAX_ITERS):
     now = time()
 
+    initial_state = state
+    cleaned_initial_state = clean_state(state)
+
     # Get information about initial state.
     player_squares, coin_count = find_players_and_coins(state)
     death_byes = ()
     has_won, has_died = check_win_death(state, death_byes, player_squares, coin_count)
     history = ()
-    q = deque([(clean_state(state), death_byes, player_squares, coin_count, has_won, has_died, history)])
+    q = deque([(cleaned_initial_state, death_byes, player_squares, coin_count, has_won, has_died, history)])
     iters = 0
     generated = set()
 
@@ -185,8 +191,7 @@ def solve(state, lim=MAX_ITERS):
         # print(', '.join(', '.join(str(t) for t in x) for x in history))
 
         if has_won:
-            # print_state(state, death_byes, player_squares, coin_count)
-            return history, iters, (time() - now)
+            return history, iters, (time() - now), initial_state
         if is_dead:
             continue
         neighbors = get_neighbors(state, death_byes, player_squares, coin_count, is_dead)
@@ -201,17 +206,23 @@ def solve(state, lim=MAX_ITERS):
 
     total_time = time() - now
 
-    return None, iters, total_time
+    return None, iters, total_time, initial_state
 
 
 
     
 def print_ans(name, ans):
-    (result, iters, duration) = ans
+    (result, iters, duration, state) = ans
     if not result:
         print(f"{name}: No solution found in {iters} iterations ({duration} secs).")
     else:
+        player_squares, coin_count = find_players_and_coins(state)
+        death_byes = ()
+        has_won, has_died = check_win_death(state, death_byes, player_squares, coin_count)
+        print_state(state, death_byes, player_squares, coin_count)
         for move in result:
+            did_state_change, (state, death_byes, player_squares, coin_count, has_won, has_died)  = apply(state, death_byes, player_squares, coin_count, move)
+                  
             if move == (0, 1):
                 print("Right")
             elif move == (1, 0):
@@ -220,6 +231,8 @@ def print_ans(name, ans):
                 print("Up")
             elif move == (0, -1):
                 print("Left")
+            
+            VERBOSE and print_state(state, death_byes, player_squares, coin_count)
         print(f"{name}: {len(result)} moves - Solved in {iters} iterations ({duration} secs).")
 
 def json_to_tuple(grid):
