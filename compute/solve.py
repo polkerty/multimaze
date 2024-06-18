@@ -22,9 +22,9 @@ def get_neighbors(state, death_byes, player_squares, coin_count, is_dead):
     return n
 
 # Note: DEATH_BYES are a very nuanced field. We pass them around
-# everywhere, but mostly for very subtle reasons, as the logic
-# they encapsulate is checked immediately after they are generated
-# within this function.
+# everywhere, but mostly for memoization reasons, as the logic
+# they encapsulate is checked immediately after they are generated,
+# entirely within this function.
 # Nevertheless, we want to return the death_byes from the function because they represent 
 # state, which we use in the memoization of the solver function,
 # and we even pass in the *previous* death_byes to this function to help us understand
@@ -51,15 +51,6 @@ def apply(state, death_byes, player_squares, coin_count, move):
         new_target = []
         can_move_onto = True
 
-        '''
-            Previous engines had a concept called "deathbyes" to deal with players temporarily
-            sitting on death squares due to the COLLAPSE token. This engine re-write removes
-            the concept of a deathbye via the following rule:
-            You can *start* a turn on a dead square - but you can't end it there. 
-            (This leads to an edge-case nuance in the rules: 
-            If someone designs a level with a token on a death square,
-            the player does NOT lose if they move immediately off it.)
-        '''
         state_change_blocked = False
         for sq in target:
             if DEATH == sq:
