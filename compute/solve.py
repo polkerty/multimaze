@@ -9,7 +9,7 @@ BARRIER = 6
 COIN = 7
 
 
-MAX_ITERS = 50
+MAX_ITERS = 100000
 
 def get_neighbors(state, player_squares, coin_count, is_dead):
     n = []
@@ -202,8 +202,8 @@ def test2():
     print_ans("Tutorial-1", ans)
 
 def run_all_tests():
-    # test1()
-    test2()
+    test1()
+    # test2()
 
 if __name__ == '__main__':
     run_all_tests()

@@ -154,6 +154,10 @@ class Board {
     }
 
     console.log(memo, Object.values(memo).length, best, "won?", best.target?.hasWon());
+    console.log(
+      "AI runtime (sec): ",
+      (new Date().getTime() - startTime) / 1000
+    );
 
     if (best.target?.hasWon()) {
       return best.path;
@@ -161,10 +165,6 @@ class Board {
       return null;
     }
 
-    console.log(
-      "AI runtime (sec): ",
-      (new Date().getTime() - startTime) / 1000
-    );
   }
 
   hash(str, seed = 0) {
