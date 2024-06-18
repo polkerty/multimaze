@@ -195,11 +195,6 @@ export default class Builder extends Component {
     this.setState({ definition, version: this.state.version + 1 });
     // Update URL
     window.location.hash = encodedState({ definition });
-
-    // We would also like to analyze the position using our web worker.
-    // But we need to disregard any previous analysis requests.
-
-    this.updateAnalysis(definition);
   }
 
   updateAnalysis(definition, deathByes) {
