@@ -15,10 +15,10 @@ def get_neighbors(state, death_byes, player_squares, coin_count, is_dead):
     n = []
     if is_dead:
         return n
-    for m in ((0, 1), (1, 0), (0, -1), (-1, 0)):
-        did_state_change, neighbor  = apply(state, death_byes, player_squares, coin_count, m)
-        if did_state_change:
-            n.append((m, neighbor))
+    for m in ((-1, 0),(1, 0),(0, -1),(0, 1)):
+        did_state_change, (new_state, new_death_byes, new_player_targets, coin_count, has_won, has_died)  = apply(state, death_byes, player_squares, coin_count, m)
+        if did_state_change and not has_died:
+            n.append((m, (new_state, new_death_byes, new_player_targets, coin_count, has_won, has_died)))
     return n
 
 # Note: DEATH_BYES are a very nuanced field. We pass them around
@@ -139,6 +139,14 @@ def find_players_and_coins(state):
                 coins += 1
     return tuple(sorted(players)), coins
 
+def clean_state(state):
+    return tuple(
+        tuple(
+            tuple(sorted(list(t for t in cell if t != PLAYER1)))
+            for cell in row
+        )
+        for row in state
+    )
 
 from collections import deque
 from time import time
@@ -150,9 +158,10 @@ def solve(state, lim=MAX_ITERS):
     death_byes = ()
     has_won, has_died = check_win_death(state, death_byes, player_squares, coin_count)
     history = ()
-    q = deque([(state, death_byes, player_squares, coin_count, has_won, has_died, history)])
+    q = deque([(clean_state(state), death_byes, player_squares, coin_count, has_won, has_died, history)])
     iters = 0
-    seen = set()
+    generated = set()
+    processed = set()
 
     # TODO: Allow non-optimal wins.
     win, best_win = None, MAX_ITERS
@@ -160,21 +169,22 @@ def solve(state, lim=MAX_ITERS):
     while len(q) and iters < lim:
         iters += 1
 
-        # print(q[0][-1], q[0][1])
-
         (state, death_byes, player_squares, coin_count, has_won, is_dead, history) = q.popleft()
 
-        if (state, death_byes, player_squares) in seen:
-            continue
-        seen.add((state, death_byes, player_squares))
+        # This log message can be useful when comparing two different solvers.
+        # print(', '.join(', '.join(str(t) for t in x) for x in history))
+
         if has_won:
             return history, iters, (time() - now)
         if is_dead:
             continue
         neighbors = get_neighbors(state, death_byes, player_squares, coin_count, is_dead)
+
         for m, n in neighbors:
-            if (n[0], n[1]) in seen:
+            if (n[0], n[1], n[2]) in generated:
                 continue
+            generated.add((n[0], n[1], n[2]))
+
             h = history + (m, )
             q.append(n + (h,))
 

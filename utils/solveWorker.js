@@ -130,6 +130,9 @@ class Board {
       if (i > 50000 && best.target) break;
 
       const [next, path] = queue.shift();
+
+      // This log message can be useful when comparing two different solvers.
+      // console.log(path.toString())
       const hash = next.getHash();
       if (seen.has(hash)) {
         continue;
