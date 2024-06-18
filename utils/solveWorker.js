@@ -104,7 +104,7 @@ class Board {
   }
 
   async aiSimple(messageId) {
-    const maxIter = 100000;
+    const maxIter = 1000000;
 
     const startTime = new Date().getTime();
     console.log("Neighbors: ", this.getNeighbors());

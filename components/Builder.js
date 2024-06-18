@@ -118,7 +118,6 @@ export default class Builder extends Component {
       version: this.state.version + 1,
       analysis: null,
     });
-    this.updateAnalysis(level.definition);
   }
 
   copyDefinition() {

@@ -9,7 +9,7 @@ BARRIER = 6
 COIN = 7
 
 
-MAX_ITERS = 100000
+MAX_ITERS = 1000000
 
 def print_state(state, death_byes, player_squares, coin_count):
     for r in state:
@@ -123,7 +123,7 @@ def apply(state, death_byes, player_squares, coin_count, move):
     new_player_targets = tuple(sorted(list(new_player_targets)))
     # Note that the new death_byes are used here.
     has_won, has_died = check_win_death(new_state, new_death_byes, new_player_targets, coin_count)
-    
+
     return is_mutating_op, (new_state, new_death_byes, new_player_targets, coin_count, has_won, has_died)
 
 def check_win_death(state, death_byes, player_squares, coin_count):
