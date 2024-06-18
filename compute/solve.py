@@ -73,8 +73,10 @@ def apply(state, death_byes, player_squares, coin_count, move):
                 # We're blocked, but the boulder will also be broken.
                 can_move_onto = False
             elif COLLAPSE == sq:
-                new_death_byes.append((tx, ty))
-                new_target.append(DEATH)
+                # Break our rule and look at the entire group
+                if not BARRIER in target:
+                    new_death_byes.append((tx, ty))
+                    new_target.append(DEATH)
             elif WALL == sq:
                 state_change_blocked = True
                 can_move_onto = False
@@ -183,12 +185,7 @@ def solve(state, lim=MAX_ITERS):
         # print(', '.join(', '.join(str(t) for t in x) for x in history))
 
         if has_won:
-            for r in state:
-                print(r)
-            print(death_byes)
-            print(player_squares)
-            print(coin_count)
-            print(is_dead)
+            # print_state(state, death_byes, player_squares, coin_count)
             return history, iters, (time() - now)
         if is_dead:
             continue
