@@ -41,7 +41,7 @@ def apply(state, death_byes, player_squares, coin_count, move):
     is_no_op = len(death_byes) > 0
     for (px, py) in player_squares:
         (tx, ty) = (px + move[0], py + move[1])
-        if tx < 0 or ty < 0 or tx > len(state) or ty > len(state[0]):
+        if tx < 0 or ty < 0 or tx >= len(state) or ty >= len(state[0]):
             # off-world move. Do nothing
             continue
 
@@ -224,16 +224,34 @@ def test1():
     print_ans("Tutorial-8", ans)
 
 def test2():
-    # Tutorial-8
+    # Tutorial-1
     grid = [[[1],[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[],[],[],[1],[],[],[],[1]],[[1],[],[1],[],[1],[],[1],[],[1]],[[1],[2],[1],[3],[1],[2],[1],[3],[1]],[[1],[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[],[],[],[1],[],[],[],[1]],[[1],[],[1],[],[1],[],[1],[],[1]],[[1],[2],[1],[3],[1],[2],[1],[3],[1]],[[1],[1],[1],[1],[1],[1],[1],[1],[1]]]
     grid = json_to_tuple(grid)
     
     ans = solve(grid)
     print_ans("Tutorial-1", ans)
 
+def test3():
+    # Tutorial-7
+    grid = [[[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[2,3],[1],[7],[7],[1],[2,3],[1]],[[1],[1],[4],[],[],[4],[1],[1]],[[1],[3],[],[5],[5],[],[7],[1]],[[1],[2,3],[],[5],[5],[],[7],[1]],[[1],[1],[4],[],[],[4],[1],[1]],[[1],[2,3],[1],[7],[7],[1],[2,3],[1]],[[1],[1],[1],[1],[1],[1],[1],[1]]]
+    grid = json_to_tuple(grid)
+    
+    ans = solve(grid)
+    print_ans("Tutorial-7", ans)
+    
+def test4():
+    # Tutorial-10
+    grid = [[[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[1],[1],[5],[3],[5],[1],[1]],[[1],[1],[5],[5],[5],[5],[5],[1]],[[],[],[5],[5],[5],[5],[5],[1]],[[2],[],[5],[5],[5],[5],[5],[7]],[[1],[1],[5,6],[5,6],[5,6],[5,6],[5,6],[]],[[1],[1],[],[],[],[],[],[]],[[1],[1],[1],[1],[1],[1],[1],[1]]]
+    grid = json_to_tuple(grid)
+    
+    ans = solve(grid)
+    print_ans("Tutorial-10", ans)
+
 def run_all_tests():
-    test1()
+    # test1()
     # test2()
+    # test3()
+    test4()
 
 if __name__ == '__main__':
     run_all_tests()
