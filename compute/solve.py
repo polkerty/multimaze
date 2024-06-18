@@ -9,20 +9,22 @@ BARRIER = 6
 COIN = 7
 
 
-MAX_ITERS = 100000
+MAX_ITERS = 50
 
 def get_neighbors(state, player_squares, coin_count, is_dead):
     n = []
     if is_dead:
         return n
     for m in ((0, 1), (1, 0), (0, -1), (-1, 0)):
-        neighbor  = apply(state,player_squares, coin_count, m)
-        n.append((m, neighbor))
+        did_state_change, neighbor  = apply(state,player_squares, coin_count, m)
+        if did_state_change:
+            n.append((m, neighbor))
     return n
 
 def apply(state, player_squares, coin_count, move):
     updates = {}
     new_player_targets = set()
+    state_change = False
     for (px, py) in player_squares:
         (tx, ty) = (px + move[0], py + move[1])
         if tx < 0 or ty < 0 or tx > len(state) or ty > len(state[0]):
@@ -44,6 +46,7 @@ def apply(state, player_squares, coin_count, move):
             If someone designs a level with a token on a death square,
             the player does NOT lose if they move immediately off it.)
         '''
+        state_change_blocked = False
         for sq in target:
             if DEATH == sq:
                 # We don't yet know if we're moving into the square, so we
@@ -59,6 +62,7 @@ def apply(state, player_squares, coin_count, move):
             elif COLLAPSE == sq:
                 new_target.append(DEATH)
             elif WALL == sq:
+                state_change_blocked = True
                 can_move_onto = False
                 new_target.append(WALL)
             elif FINISH1 == sq:
@@ -66,12 +70,13 @@ def apply(state, player_squares, coin_count, move):
             elif PLAYER1 == sq:
                 # We manage players separately. The only reason a player would actually show up here
                 # is if this is the original, externally-supplied grid.
-                continue  
+                continue
+
+        if not state_change_blocked:
+            state_change = True
 
         new_target = tuple(sorted(target)) # Canonical form
         updates[(tx, ty)] = new_target
-
-        # print(f"\tAttempted to move from {(px, py)} on to square {(tx, ty)}. Its contents were {target}. The new contents will be {new_target}. Was the move allowed? {can_move_onto}")
     
         # Assign player squares.
         if can_move_onto:
@@ -97,7 +102,7 @@ def apply(state, player_squares, coin_count, move):
     new_player_targets = tuple(sorted(list(new_player_targets)))
     has_won, has_died = check_win_death(new_state, new_player_targets, coin_count)
 
-    return new_state, new_player_targets, coin_count, has_won, has_died
+    return state_change, (new_state, new_player_targets, coin_count, has_won, has_died)
 
 def check_win_death(state, player_squares, coin_count):
     has_won = coin_count == 0
@@ -122,7 +127,7 @@ def find_players_and_coins(state):
 
 
 from collections import deque
-def solve(state, lim=100000):
+def solve(state, lim=MAX_ITERS):
 
     # Get information about initial state.
     player_squares, coin_count = find_players_and_coins(state)
@@ -131,6 +136,9 @@ def solve(state, lim=100000):
     q = deque([(state, player_squares, coin_count, has_won, has_died, ())]) # Extra tuple is for history.
     iters = 0
     seen = set()
+
+    # TODO: Allow non-optimal wins.
+    win, best_win = None, MAX_ITERS
 
     while len(q) and iters < lim:
         iters += 1
@@ -147,7 +155,9 @@ def solve(state, lim=100000):
             continue
         neighbors = get_neighbors(state, player_squares, coin_count, is_dead)
         for m, n in neighbors:
-            h = history + m
+            if (n[0], n[1]) in seen:
+                continue
+            h = history + (m, )
             q.append(n + (h,))
 
     return None, iters
@@ -156,9 +166,9 @@ def solve(state, lim=100000):
 
     
 def print_ans(name, ans):
-    (result, moves) = ans
+    (result, iters) = ans
     if not result:
-        print(f"{name}: No solution found in {moves} iterations.")
+        print(f"{name}: No solution found in {iters} iterations.")
     else:
         for move in result:
             if move == (0, 1):
@@ -169,7 +179,7 @@ def print_ans(name, ans):
                 print("Up")
             elif move == (0, -1):
                 print("Left")
-        print(f"{name}: Solved in f{moves} moves.")
+        print(f"{name}: {len(result)} moves - Solved in {iters} iterations.")
 
 def json_to_tuple(grid):
     return tuple(tuple(tuple(cell) for cell in row) for row in grid)
@@ -183,8 +193,17 @@ def test1():
     ans = solve(grid)
     print_ans("Tutorial-8", ans)
 
+def test2():
+    # Tutorial-8
+    grid = [[[1],[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[],[],[],[1],[],[],[],[1]],[[1],[],[1],[],[1],[],[1],[],[1]],[[1],[2],[1],[3],[1],[2],[1],[3],[1]],[[1],[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[],[],[],[1],[],[],[],[1]],[[1],[],[1],[],[1],[],[1],[],[1]],[[1],[2],[1],[3],[1],[2],[1],[3],[1]],[[1],[1],[1],[1],[1],[1],[1],[1],[1]]]
+    grid = json_to_tuple(grid)
+    
+    ans = solve(grid)
+    print_ans("Tutorial-1", ans)
+
 def run_all_tests():
-    test1()
+    # test1()
+    test2()
 
 if __name__ == '__main__':
     run_all_tests()
