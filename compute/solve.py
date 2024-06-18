@@ -11,6 +11,13 @@ COIN = 7
 
 MAX_ITERS = 100000
 
+def print_state(state, death_byes, player_squares, coin_count):
+    for r in state:
+        print(r)
+    print('Death byes: ', death_byes)
+    print('Players: ', player_squares)
+    print('Coins: ', coin_count)
+
 def get_neighbors(state, death_byes, player_squares, coin_count, is_dead):
     n = []
     if is_dead:
@@ -38,11 +45,12 @@ def apply(state, death_byes, player_squares, coin_count, move):
     # If the previous step generated a death bye, that guarantees 
     # that THIS step would invalidate it, so it will not be a no-op.
     # (But there are many other ways for this to not be a no-op.)
-    is_no_op = len(death_byes) > 0
+    is_mutating_op = len(death_byes) > 0
     for (px, py) in player_squares:
         (tx, ty) = (px + move[0], py + move[1])
         if tx < 0 or ty < 0 or tx >= len(state) or ty >= len(state[0]):
             # off-world move. Do nothing
+            new_player_targets.add((px, py))
             continue
 
         #### RULES ######
@@ -79,7 +87,7 @@ def apply(state, death_byes, player_squares, coin_count, move):
                 continue
 
         if not state_change_blocked:
-            is_no_op = True
+            is_mutating_op = True
 
         new_target = tuple(sorted(new_target)) # Canonical form
         if target != new_target:
@@ -92,10 +100,10 @@ def apply(state, death_byes, player_squares, coin_count, move):
             new_player_targets.add((px, py))
 
     new_death_byes = tuple(sorted(new_death_byes))
-    if not is_no_op:
+    if not is_mutating_op:
         # Assume no win/loss, since we wouldn't be attempting a move if we had.
         # Since we had no mutations, save the trouble of copying state (below).
-        return is_no_op, (state, new_death_byes, player_squares, coin_count, False, False)
+        return is_mutating_op, (state, new_death_byes, player_squares, coin_count, False, False)
 
     # Construct next state.
             
@@ -115,8 +123,8 @@ def apply(state, death_byes, player_squares, coin_count, move):
     new_player_targets = tuple(sorted(list(new_player_targets)))
     # Note that the new death_byes are used here.
     has_won, has_died = check_win_death(new_state, new_death_byes, new_player_targets, coin_count)
-
-    return is_no_op, (new_state, new_death_byes, new_player_targets, coin_count, has_won, has_died)
+    
+    return is_mutating_op, (new_state, new_death_byes, new_player_targets, coin_count, has_won, has_died)
 
 def check_win_death(state, death_byes, player_squares, coin_count):
     has_won = coin_count == 0
@@ -161,7 +169,7 @@ def solve(state, lim=MAX_ITERS):
     q = deque([(clean_state(state), death_byes, player_squares, coin_count, has_won, has_died, history)])
     iters = 0
     generated = set()
-    processed = set()
+
 
     # TODO: Allow non-optimal wins.
     win, best_win = None, MAX_ITERS
@@ -175,6 +183,12 @@ def solve(state, lim=MAX_ITERS):
         # print(', '.join(', '.join(str(t) for t in x) for x in history))
 
         if has_won:
+            for r in state:
+                print(r)
+            print(death_byes)
+            print(player_squares)
+            print(coin_count)
+            print(is_dead)
             return history, iters, (time() - now)
         if is_dead:
             continue
