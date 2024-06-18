@@ -135,12 +135,12 @@ def solve(state, lim=100000):
     while len(q) and iters < lim:
         iters += 1
 
-        print(q[0][-1], q[0][1])
+        # print(q[0][-1], q[0][1], q[0][3], q[0][4])
         (state, player_squares, coin_count, has_won, is_dead, history) = q.popleft()
 
-        if state in seen:
+        if (state, player_squares) in seen:
             continue
-        seen.add(state)
+        seen.add((state, player_squares))
         if has_won:
             return history, iters
         if is_dead:
