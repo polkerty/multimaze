@@ -10,7 +10,7 @@ COIN = 7
 
 
 MAX_ITERS = 1000000
-VERBOSE = False
+VERBOSE = True
 
 def print_state(state, death_byes, player_squares, coin_count):
     for r in state:
@@ -270,12 +270,21 @@ def test4():
     
     ans = solve(grid)
     print_ans("Tutorial-10", ans)
+    
+def test5():
+    # Easy-11
+    grid = [[[],[5],[],[],[6],[],[7],[1]],[[],[1],[1],[1],[5,6],[4],[],[]],[[],[1],[6],[],[6],[6],[1],[5]],[[],[1],[5],[5],[1],[5,6],[1],[]],[[],[],[],[],[1],[],[],[3]],[[],[1],[1],[1],[1],[1],[4],[]],[[],[1],[3],[],[],[1],[1],[1]],[[2],[1],[2],[],[],[4],[1],[1]]]
+    grid = json_to_tuple(grid)
+    
+    ans = solve(grid)
+    print_ans("Easy-11", ans)
 
 def run_all_tests():
     # test1()
     # test2()
     # test3()
-    test4()
+    # test4()
+    test5()
 
 if __name__ == '__main__':
     run_all_tests()
