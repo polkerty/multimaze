@@ -313,9 +313,8 @@ if __name__ == '__main__':
     run_all_tests()
 
 ######### HILL CLIMBING #############
-from random import randrange, choice
+from random import randrange, choices
 POSSIBLE_VALUES = [
-    [EMPTY],
     [WALL],
     [PLAYER1],
     [FINISH1],
@@ -329,14 +328,36 @@ POSSIBLE_VALUES = [
     [FINISH1, COIN],
     [FINISH1, BARRIER]   
 ]
-def mutate_grid(grid, change_cnt):
-    mutable_grid = list(list(list(cell) for cell in row) for row in grid)
-    for _ in range(change_cnt):
-        row_pos = randrange(0, len(mutable_grid))
-        col_pos = randrange(0, len(mutable_grid[0]))
-        mutable_grid[row_pos][col_pos] = choice(POSSIBLE_VALUES)
 
-    return tuple(tuple(tuple(cell) for cell in row) for row in mutable_grid)
+WEIGHTS = (
+    10,
+    1,
+    1,
+    2,
+    3,
+    1,
+    2,
+    4,
+    1,
+    1,
+    1,
+    1,
+)
+def mutate_grid(grid, change_cnt, max_deg_of_freedom, max_tries=300):
+    tries = 0
+    original_players = count_players(grid)
+    while tries < max_tries:
+        tries += 1
+        mutable_grid = list(list(list(cell) for cell in row) for row in grid)
+        for _ in range(change_cnt):
+            row_pos = randrange(0, len(mutable_grid))
+            col_pos = randrange(0, len(mutable_grid[0]))
+            mutable_grid[row_pos][col_pos] = choices(POSSIBLE_VALUES, weights=WEIGHTS, k=1)[0]
+        if count_players(mutable_grid) != original_players:
+            continue 
+        if count_degrees_of_freedom(mutable_grid) <= max_deg_of_freedom:
+            break
+    return json_to_tuple(mutable_grid)
 
 
 def score(path):
@@ -350,6 +371,22 @@ def score(path):
             val += 1
     return val
 
+def count_degrees_of_freedom(grid):
+    tot = 0
+    for row in grid:
+        for col in row:
+            if any(token in (COLLAPSE, COIN, BARRIER) for token in col):
+                tot += 1
+    return tot
+
+def count_players(grid):
+    tot = 0
+    for row in grid:
+        for col in row:
+            if PLAYER1 in col:
+                tot += 1
+    return tot
+
 ##### MODAL ######
 # I can't figure out how to import stuff from other files
 # and make it work for Modal,
@@ -360,9 +397,9 @@ stub = modal.App("multimaze-searcher")
 
 
 @stub.function()
-def hillclimb(x, change_cnt):
+def hillclimb(x, change_cnt, max_deg_of_freedom):
     x = json_to_tuple(x)
-    x2 = mutate_grid(x, change_cnt)
+    x2 = mutate_grid(x, change_cnt, max_deg_of_freedom)
     result = solve(x2)
     return x2, result
 
@@ -371,8 +408,6 @@ def solve_grid(x):
     x = json_to_tuple(x)
     result = solve(x)
     return result
-
-
 
 
 @stub.local_entrypoint()
@@ -389,21 +424,27 @@ def main():
     print("Baseline difficulty: ", score(b_result), b_iters)
 
     best, difficulty, prev_iter_cap = (grid, baseline), score(b_result), b_iters
-    for (parallel, mutation_count, max_iters) in [
-        (100, 5, 100000),
-        (100, 5, 120000),
-        (100, 2, 130000),
-        (100, 1, 150000),
+    for (parallel, mutation_count, max_iters, max_deg_freedom) in [
+        (500, 10, 100000, 2),
+        (100, 8, 100000, 2),
+        (100, 6, 120000, 3),
+        (200, 4, 120000, 3),
+        (200, 3, 140000, 4),
+        (100, 2, 150000, 4),
+        (100, 1, 170000, 4),
+        (100, 1, 170000, 5),
+        (100, 1, 170000, 6),
     ]:
         trials = hillclimb.starmap([
-            (grid, mutation_count) for _ in range(parallel)
+            (grid, mutation_count, max_deg_freedom) for _ in range(parallel)
         ])
         
         for ans in trials:
             grid, (result, iters, duration, state) = ans
             s = score(result)
-            print('\t', s, len(result) if result else 'x', iters)
-            if result and (s > difficulty or (s == difficulty and iters > prev_iter_cap)) and iters < max_iters: # and \
+            print('\t', s, len(result) if result else 'x', iters, count_degrees_of_freedom(grid))
+            if result and (s > difficulty or (s == difficulty and iters > prev_iter_cap)) and iters < max_iters and \
+                count_degrees_of_freedom(grid) <= max_deg_freedom and count_players(grid) == 2: # and \
                 # iters < prev_iter_cap * (1.1**(len(result) - difficulty)):
                  # The computer's number of moves to solve it should increase by no more than 5% \
                 # for each additional step of difficulty. \
@@ -413,7 +454,7 @@ def main():
             print("No improvements were found.")
         else:
             print(best[1])
-            print(difficulty, prev_iter_cap)
+            print(difficulty, prev_iter_cap, count_degrees_of_freedom(best[0]))
             print(tuple_to_json(best[0]))
 
 
