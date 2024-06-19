@@ -295,15 +295,94 @@ def test7():
     ans = solve(grid)
     print_ans("Hard-5", ans)
 
-
 def run_all_tests():
     # test1()
     # test2()
     # test3()
-    # test4()
+    test4()
     # test5()
     # test6()
-    test7()
+    # test7()
 
 if __name__ == '__main__':
     run_all_tests()
+
+######### HILL CLIMBING #############
+from random import randrange, choice
+POSSIBLE_VALUES = [
+    [EMPTY],
+    [WALL],
+    [PLAYER1],
+    [FINISH1],
+    [DEATH],
+    [COLLAPSE],
+    [BARRIER],
+    [COIN],
+    [COLLAPSE, BARRIER],
+    [DEATH, BARRIER],
+    [COLLAPSE, COIN],
+    [FINISH1, COIN],
+    [FINISH1, BARRIER]   
+]
+def mutate_grid(grid, change_cnt):
+    mutable_grid = list(list(list(cell) for cell in row) for row in grid)
+    for _ in range(change_cnt):
+        row_pos = randrange(0, len(mutable_grid))
+        col_pos = randrange(0, len(mutable_grid[0]))
+        mutable_grid[row_pos][col_pos] = choice(POSSIBLE_VALUES)
+
+    return tuple(tuple(tuple(cell) for cell in row) for row in mutable_grid)
+
+
+##### MODAL ######
+# I can't figure out how to import stuff from other files
+# and make it work for Modal,
+# so it'll all just have to go here for now.
+    
+import modal
+stub = modal.App("multimaze-searcher")
+
+
+@stub.function()
+def hillclimb(x, change_cnt):
+    x = json_to_tuple(x)
+    x2 = mutate_grid(x, change_cnt)
+    result = solve(x2)
+    return result
+
+@stub.function()
+def solve_grid(x):
+    x = json_to_tuple(x)
+    result = solve(x)
+    return result
+
+
+
+
+@stub.local_entrypoint()
+def main():
+    grid = [[[1],[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[1],[2],[],[],[],[],[2],[1]],[[1],[1],[1],[5],[1],[1],[1],[1],[1]],[[1],[2],[],[],[],[],[],[1],[1]],[[1],[1],[1],[1],[1],[1],[5],[1],[1]],[[1],[1],[],[],[],[],[],[2],[1]],[[1],[1],[5],[1],[1],[1],[1],[1],[1]],[[1],[2],[],[],[],[],[3],[1],[1]],[[1],[1],[1],[1],[1],[1],[1],[1],[1]]]
+    
+    baseline = solve_grid.remote(grid)
+    (b_result, b_iters, b_duration, b_state) = baseline
+
+    if not b_result:
+        raise ValueError("Initial grid is not solveable")
+    
+    print("Baseline difficulty: ", len(b_result))
+
+    trials = hillclimb.starmap([
+        (grid, 3) for _ in range(100)
+    ])
+    
+    best, difficulty = None, len(b_result)
+    for ans in trials:
+        (result, iters, duration, state) = ans
+        if result and len(result) > difficulty:
+            best, difficulty = ans, len(result)
+
+    print(best)
+    print(difficulty)
+
+
+    
