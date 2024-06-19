@@ -130,9 +130,10 @@ export default class Builder extends Component {
     );
 
     try {
-      const level = JSON.parse(data);
-      this.load(level);
+      const definition = JSON.parse(data);
+      this.load({ definition });
     } catch (e) {
+      console.error(e);
       alert("That didn't work, sorry: " + e.toString());
     }
   }

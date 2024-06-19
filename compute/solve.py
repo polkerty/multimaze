@@ -353,7 +353,7 @@ def hillclimb(x, change_cnt):
     x = json_to_tuple(x)
     x2 = mutate_grid(x, change_cnt)
     result = solve(x2)
-    return x, result
+    return x2, result
 
 @stub.function()
 def solve_grid(x):
