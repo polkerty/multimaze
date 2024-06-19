@@ -111,13 +111,7 @@ export default class Builder extends Component {
 
   load(level) {
     this.clear(); // this resets the solver, etc.
-    this.setState({
-      rows: level.definition.length,
-      cols: level.definition[0].length,
-      definition: level.definition,
-      version: this.state.version + 1,
-      analysis: null,
-    });
+    this.applyStateChange(level.definition);
   }
 
   copyDefinition() {
@@ -206,7 +200,12 @@ export default class Builder extends Component {
 
   applyStateChange(definition) {
     this.state.history.push(this.state.definition);
-    this.setState({ definition, version: this.state.version + 1 });
+    this.setState({
+      definition,
+      version: this.state.version + 1,
+      rows: definition.length,
+      cols: definition[0].length,
+    });
     // Update URL
     window.location.hash = encodedState({ definition });
   }

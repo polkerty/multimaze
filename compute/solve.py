@@ -9,7 +9,7 @@ BARRIER = 6
 COIN = 7
 
 
-MAX_ITERS = 1000000
+MAX_ITERS = 250000
 VERBOSE = False
 
 def print_state(state, death_byes, player_squares, coin_count):
@@ -339,6 +339,17 @@ def mutate_grid(grid, change_cnt):
     return tuple(tuple(tuple(cell) for cell in row) for row in mutable_grid)
 
 
+def score(path):
+    if not path:
+        return 0
+    last = None
+    val = 0
+    for item in path:
+        if item != last:
+            last = item
+            val += 1
+    return val
+
 ##### MODAL ######
 # I can't figure out how to import stuff from other files
 # and make it work for Modal,
@@ -366,32 +377,44 @@ def solve_grid(x):
 
 @stub.local_entrypoint()
 def main():
-    grid = [[[1],[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[1],[2],[],[],[],[],[2],[1]],[[1],[1],[1],[5],[1],[1],[1],[1],[1]],[[1],[2],[],[],[],[],[],[1],[1]],[[1],[1],[1],[1],[1],[1],[5],[1],[1]],[[1],[1],[],[],[],[],[],[2],[1]],[[1],[1],[5],[1],[1],[1],[1],[1],[1]],[[1],[2],[],[],[],[],[3],[1],[1]],[[1],[1],[1],[1],[1],[1],[1],[1],[1]]]
-    
+    # grid = [[[1],[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[1],[2],[],[],[],[],[2],[1]],[[1],[1],[1],[5],[1],[1],[1],[1],[1]],[[1],[2],[],[],[],[],[],[1],[1]],[[1],[1],[1],[1],[1],[1],[5],[1],[1]],[[1],[1],[],[],[],[],[],[2],[1]],[[1],[1],[5],[1],[1],[1],[1],[1],[1]],[[1],[2],[],[],[],[],[3],[1],[1]],[[1],[1],[1],[1],[1],[1],[1],[1],[1]]]
+    # Mostly empty 6x11 grid, in the spirit of the old curated puzzles.
+    grid = [[[],[],[],[],[],[1],[],[],[],[],[]],[[],[3],[],[],[],[1],[],[],[],[3],[]],[[],[],[],[],[],[1],[],[],[],[],[]],[[],[],[],[],[],[1],[],[],[],[],[]],[[],[],[],[],[],[1],[],[],[],[],[]],[[],[2],[],[],[],[1],[],[],[],[2],[]]]
     baseline = solve_grid.remote(grid)
     (b_result, b_iters, b_duration, b_state) = baseline
 
     if not b_result:
         raise ValueError("Initial grid is not solveable")
     
-    print("Baseline difficulty: ", len(b_result))
+    print("Baseline difficulty: ", score(b_result), b_iters)
 
-    trials = hillclimb.starmap([
-        (grid, 3) for _ in range(100)
-    ])
-    
-    best, difficulty = None, len(b_result)
-    for ans in trials:
-        grid, (result, iters, duration, state) = ans
-        if result and len(result) > difficulty:
-            best, difficulty = (grid, ans), len(result)
+    best, difficulty, prev_iter_cap = (grid, baseline), score(b_result), b_iters
+    for (parallel, mutation_count, max_iters) in [
+        (100, 5, 100000),
+        (100, 5, 120000),
+        (100, 2, 130000),
+        (100, 1, 150000),
+    ]:
+        trials = hillclimb.starmap([
+            (grid, mutation_count) for _ in range(parallel)
+        ])
+        
+        for ans in trials:
+            grid, (result, iters, duration, state) = ans
+            s = score(result)
+            print('\t', s, len(result) if result else 'x', iters)
+            if result and (s > difficulty or (s == difficulty and iters > prev_iter_cap)) and iters < max_iters: # and \
+                # iters < prev_iter_cap * (1.1**(len(result) - difficulty)):
+                 # The computer's number of moves to solve it should increase by no more than 5% \
+                # for each additional step of difficulty. \
+                best, difficulty, prev_iter_cap = (grid, ans), s, iters
 
-    if not best:
-        print("No improvements were found.")
-    else:
-        print(best[1])
-        print(difficulty)
-        print(tuple_to_json(best[0]))
+        if not best:
+            print("No improvements were found.")
+        else:
+            print(best[1])
+            print(difficulty, prev_iter_cap)
+            print(tuple_to_json(best[0]))
 
 
 
