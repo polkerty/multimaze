@@ -124,6 +124,19 @@ export default class Builder extends Component {
     copyText(JSON.stringify(this.state.definition));
   }
 
+  promptDefinition() {
+    data = prompt(
+      "Please enter the JSON definition of the level, in the same format that you'd get it e.g. from the COPY button."
+    );
+
+    try {
+      const level = JSON.parse(data);
+      this.load(level);
+    } catch (e) {
+      alert("That didn't work, sorry: " + e.toString());
+    }
+  }
+
   componentDidMount() {
     if (typeof window === "undefined") {
       return;
@@ -328,6 +341,14 @@ export default class Builder extends Component {
                 onClick={() => this.copyDefinition()}
               >
                 Copy
+              </button>
+            </div>
+            <div>
+              <button
+                className={"tool-btn"}
+                onClick={() => this.promptDefinition()}
+              >
+                Load
               </button>
             </div>
             {(this.state.analysis || this.state.analyzing) && (
