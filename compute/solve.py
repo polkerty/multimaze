@@ -315,6 +315,7 @@ if __name__ == '__main__':
 ######### HILL CLIMBING #############
 from random import randrange, choices
 POSSIBLE_VALUES = [
+    [EMPTY],
     [WALL],
     [PLAYER1],
     [FINISH1],
@@ -330,6 +331,7 @@ POSSIBLE_VALUES = [
 ]
 
 WEIGHTS = (
+    4,
     10,
     1,
     1,
@@ -414,7 +416,7 @@ def solve_grid(x):
 def main():
     # grid = [[[1],[1],[1],[1],[1],[1],[1],[1],[1]],[[1],[1],[2],[],[],[],[],[2],[1]],[[1],[1],[1],[5],[1],[1],[1],[1],[1]],[[1],[2],[],[],[],[],[],[1],[1]],[[1],[1],[1],[1],[1],[1],[5],[1],[1]],[[1],[1],[],[],[],[],[],[2],[1]],[[1],[1],[5],[1],[1],[1],[1],[1],[1]],[[1],[2],[],[],[],[],[3],[1],[1]],[[1],[1],[1],[1],[1],[1],[1],[1],[1]]]
     # Mostly empty 6x11 grid, in the spirit of the old curated puzzles.
-    grid = [[[],[],[],[],[],[1],[],[],[],[],[]],[[],[3],[],[],[],[1],[],[],[],[3],[]],[[],[],[],[],[],[1],[],[],[],[],[]],[[],[],[],[],[],[1],[],[],[],[],[]],[[],[],[],[],[],[1],[],[],[],[],[]],[[],[2],[],[],[],[1],[],[],[],[2],[]]]
+    grid = [[[],[],[],[3],[1],[],[],[],[3]],[[],[],[],[],[1],[],[],[],[]],[[],[],[],[],[1],[],[],[],[]],[[2],[],[],[],[1],[2],[],[],[]]]    
     baseline = solve_grid.remote(grid)
     (b_result, b_iters, b_duration, b_state) = baseline
 
@@ -424,16 +426,10 @@ def main():
     print("Baseline difficulty: ", score(b_result), b_iters)
 
     best, difficulty, prev_iter_cap = (grid, baseline), score(b_result), b_iters
-    for (parallel, mutation_count, max_iters, max_deg_freedom) in [
-        (500, 10, 100000, 2),
-        (100, 8, 100000, 2),
-        (100, 6, 120000, 3),
-        (200, 4, 120000, 3),
-        (200, 3, 140000, 4),
-        (100, 2, 150000, 4),
-        (100, 1, 170000, 4),
-        (100, 1, 170000, 5),
-        (100, 1, 170000, 6),
+    for (parallel, mutation_count, min_iters, max_iters, max_deg_freedom) in [
+        (999, 9, 0, 120000, 3),
+        (999, 4, 0, 160000, 4),
+        (999, 3, 0, 250000, 6),
     ]:
         trials = hillclimb.starmap([
             (grid, mutation_count, max_deg_freedom) for _ in range(parallel)
@@ -442,8 +438,9 @@ def main():
         for ans in trials:
             grid, (result, iters, duration, state) = ans
             s = score(result)
-            print('\t', s, len(result) if result else 'x', iters, count_degrees_of_freedom(grid))
-            if result and (s > difficulty or (s == difficulty and iters > prev_iter_cap)) and iters < max_iters and \
+            # print('\t', s, len(result) if result else 'x', iters, count_degrees_of_freedom(grid))
+            if result and (s > difficulty or (s == difficulty and iters < prev_iter_cap)) \
+                and iters < max_iters and iters > min_iters and \
                 count_degrees_of_freedom(grid) <= max_deg_freedom and count_players(grid) == 2: # and \
                 # iters < prev_iter_cap * (1.1**(len(result) - difficulty)):
                  # The computer's number of moves to solve it should increase by no more than 5% \

@@ -106,6 +106,7 @@ export default class Builder extends Component {
       analysis: null,
       analyzing: false,
       libraryOpen: false,
+      solverOn: true,
     };
   }
 
@@ -116,6 +117,17 @@ export default class Builder extends Component {
 
   copyDefinition() {
     copyText(JSON.stringify(this.state.definition));
+  }
+
+  toggleSolver() {
+    this.clearAnalysis();
+    const solverOn = !this.state.solverOn;
+    this.setState({
+      solverOn,
+    });
+    if (solverOn) {
+      this.updateAnalysis(this.state.definition);
+    } 
   }
 
   promptDefinition() {
@@ -186,13 +198,17 @@ export default class Builder extends Component {
     this.applyStateChange(newDefinition);
   }
 
-  clear() {
-    window.location.hash = "";
+  clearAnalysis() {
     window.solver.refresh();
     this.setState({
       analysis: null,
       analyzing: false,
     });
+  }
+
+  clear() {
+    window.location.hash = "";
+    this.clearAnalysis();
     this.applyStateChange(
       makeBlankDefinition(this.state.rows, this.state.cols)
     );
@@ -351,12 +367,21 @@ export default class Builder extends Component {
                 Load
               </button>
             </div>
-            {(this.state.analysis || this.state.analyzing) && (
-              <Analysis
-                {...this.state.analysis}
-                analyzing={this.state.analyzing}
-              />
-            )}
+            <div>
+              <button
+                className={"tool-btn"}
+                onClick={() => this.toggleSolver()}
+              >
+                {this.state.solverOn ? "Manual" : "Help"}
+              </button>
+            </div>
+            {this.state.solverOn &&
+              (this.state.analysis || this.state.analyzing) && (
+                <Analysis
+                  {...this.state.analysis}
+                  analyzing={this.state.analyzing}
+                />
+              )}
           </div>
         </div>
 
