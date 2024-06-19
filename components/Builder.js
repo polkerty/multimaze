@@ -125,7 +125,7 @@ export default class Builder extends Component {
   }
 
   promptDefinition() {
-    data = prompt(
+    const data = prompt(
       "Please enter the JSON definition of the level, in the same format that you'd get it e.g. from the COPY button."
     );
 

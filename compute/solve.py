@@ -238,6 +238,11 @@ def print_ans(name, ans):
 def json_to_tuple(grid):
     return tuple(tuple(tuple(cell) for cell in row) for row in grid)
 
+import json
+def tuple_to_json(grid):
+    lists = list(list(list(cell) for cell in row) for row in grid)
+    return json.dumps(lists)
+
 # tests
 def test1():
     # Tutorial-8
@@ -348,7 +353,7 @@ def hillclimb(x, change_cnt):
     x = json_to_tuple(x)
     x2 = mutate_grid(x, change_cnt)
     result = solve(x2)
-    return result
+    return x, result
 
 @stub.function()
 def solve_grid(x):
@@ -377,12 +382,17 @@ def main():
     
     best, difficulty = None, len(b_result)
     for ans in trials:
-        (result, iters, duration, state) = ans
+        grid, (result, iters, duration, state) = ans
         if result and len(result) > difficulty:
-            best, difficulty = ans, len(result)
+            best, difficulty = (grid, ans), len(result)
 
-    print(best)
-    print(difficulty)
+    if not best:
+        print("No improvements were found.")
+    else:
+        print(best[1])
+        print(difficulty)
+        print(tuple_to_json(best[0]))
+
 
 
     
