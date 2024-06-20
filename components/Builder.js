@@ -108,6 +108,8 @@ export default class Builder extends Component {
       libraryOpen: false,
       solverOn: true,
     };
+
+    this.levelRef = React.createRef();
   }
 
   load(level) {
@@ -126,7 +128,9 @@ export default class Builder extends Component {
       solverOn,
     });
     if (solverOn) {
-      this.updateAnalysis(this.state.definition);
+      // This a bit hacky, but we need the current analysis
+      // to reflect the live state of the board, not the initial definition.
+      this.levelRef.current?.onchange();
     } 
   }
 
@@ -304,6 +308,7 @@ export default class Builder extends Component {
               key={this.state.version}
               onclick={this.clickHandler.bind(this)}
               onchange={this.changeHandler.bind(this)}
+              ref={this.levelRef}
             />
           </div>
           <div className="builder__tools-pane">
